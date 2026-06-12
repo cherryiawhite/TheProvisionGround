@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Provision Ground · A Research Program</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..500&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#11212E; --indigo:#1E3A57; --tide:#36807A; --tide-deep:#225e59;
+  --ochre:#BE7B3A; --oxblood:#7C3327; --paper:#F5EFE3; --paper2:#ECE2D0;
+  --line:rgba(17,33,46,.16); --muted:#5a5043;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Spectral',Georgia,serif;color:var(--ink);background:var(--paper);
+  -webkit-font-smoothing:antialiased;line-height:1.55;
+  min-height:100vh;display:flex;flex-direction:column;
+}
+.wrap{width:100%;max-width:760px;margin:0 auto;padding:clamp(28px,6vw,64px) clamp(20px,5vw,40px) 40px;flex:1;}
+
+.eyebrow{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--tide-deep);}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(40px,9vw,68px);line-height:.95;letter-spacing:-.02em;margin:14px 0 0;font-variation-settings:'opsz' 144,'WONK' 1;}
+.sub{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(15px,2.6vw,19px);color:var(--tide-deep);margin:14px 0 0;line-height:1.35;max-width:34em;}
+.tideline{display:block;width:100%;max-width:520px;height:14px;margin:26px 0 30px;}
+
+.intro{font-size:clamp(14px,2.2vw,16px);max-width:40em;color:#2a3742;margin:0 0 8px;}
+.intro.small{font-size:13.5px;color:var(--muted);}
+
+.docs{display:flex;flex-direction:column;gap:14px;margin:34px 0 10px;}
+a.doc{
+  display:flex;align-items:flex-start;gap:16px;text-decoration:none;color:inherit;
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--tide);
+  border-radius:4px;padding:18px 20px;transition:transform .14s ease,box-shadow .14s ease,border-color .14s ease;
+}
+a.doc:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(17,33,46,.12);border-left-color:var(--ochre);}
+a.doc .num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;letter-spacing:.08em;color:var(--tide-deep);padding-top:4px;min-width:20px;}
+a.doc .body{flex:1;}
+a.doc .t{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(18px,3vw,22px);line-height:1.1;margin:0;}
+a.doc .d{font-size:13.5px;color:var(--muted);margin:4px 0 0;}
+a.doc .go{font-family:'Space Grotesk',sans-serif;font-size:18px;color:var(--tide);padding-top:4px;transition:transform .14s ease;}
+a.doc:hover .go{transform:translateX(3px);color:var(--ochre);}
+
+.divider{display:flex;align-items:center;gap:12px;margin:26px 0 14px;}
+.divider span{font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+.divider .ln{flex:1;height:1px;background:var(--line);}
+
+a.doc.minor{border-left-color:var(--ochre);background:transparent;padding:14px 18px;}
+a.doc.minor .t{font-size:16px;}
+
+footer{border-top:1px solid var(--line);background:var(--paper);}
+.foot{max-width:760px;margin:0 auto;padding:18px clamp(20px,5vw,40px) 28px;
+  font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="eyebrow">A research program · CCDGB Lab · Duke University</div>
+    <h1>The Provision&nbsp;Ground</h1>
+    <p class="sub">Climate, decoloniality, and the Black Atlantic. A program of inquiry, its capabilities, and the map that holds it together.</p>
+
+    <svg class="tideline" viewBox="0 0 520 14" preserveAspectRatio="none">
+      <path d="M0 9 Q 45 1 90 7 T 180 7 T 270 6 T 360 8 T 450 6 T 520 7" fill="none" stroke="#36807A" stroke-width="1.5"/>
+      <path d="M0 12 Q 45 5 90 10 T 180 10 T 270 9 T 360 11 T 450 9 T 520 10" fill="none" stroke="#BE7B3A" stroke-width="1.1" opacity=".7"/>
+    </svg>
+
+    <p class="intro">Prepared by Cherryia White for Prof. Michaeline Crichlow. The materials below set out a multiyear research program at the intersection of climate change, decoloniality, and global Blackness, together with the case for the interdisciplinary work it would require and an interactive companion to its geography.</p>
+    <p class="intro small">Each piece is open to revision at every level.</p>
+
+    <nav class="docs">
+      <a class="doc" href="prospectus.html">
+        <span class="num">01</span>
+        <span class="body">
+          <span class="t">The Research Prospectus</span>
+          <span class="d">Eight research provocations, an operational agenda, the methods and data, and a publication architecture for the program.</span>
+        </span>
+        <span class="go">→</span>
+      </a>
+
+      <a class="doc" href="strengths.html">
+        <span class="num">02</span>
+        <span class="body">
+          <span class="t">Ground Truth</span>
+          <span class="d">A capabilities brief: what a scholar of the Black Atlantic who is also an ecologist, a diver, and a conservationist brings to the work.</span>
+        </span>
+        <span class="go">→</span>
+      </a>
+
+      <a class="doc" href="atlas.html">
+        <span class="num">03</span>
+        <span class="body">
+          <span class="t">Mapping the Break · The Interactive Atlas</span>
+          <span class="d">A working prototype where every coordinate holds three registers at once: the data, the history, and the testimony.</span>
+        </span>
+        <span class="go">→</span>
+      </a>
+    </nav>
+  </main>
+
+  <footer>
+    <div class="foot">
+      <span>Where the Tide Remembers · OJAI</span>
+      <span>Cherryia White · for M. Crichlow · CCDGB</span>
+    </div>
+  </footer>
+</body>
+</html>
