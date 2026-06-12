@@ -104,9 +104,22 @@ table.matrix tr:last-child td{border-bottom:0;}
 .qbox{background:var(--paper2);border-left:3px solid var(--ochre);border-radius:3px;padding:9pt 12pt;margin:7pt 0;}
 .qbox .label{color:var(--ochre);}
 .openq{font-family:'Fraunces',serif;font-style:italic;font-size:10.5pt;color:var(--indigo);line-height:1.4;margin:3pt 0 0;}
+
+/* SITE NAV */
+.sitenav{position:sticky;top:0;z-index:100;background:var(--paper);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,5vw,40px);height:44px;gap:16px;}
+.sitenav .home{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--tide-deep);text-decoration:none;white-space:nowrap;flex-shrink:0;}
+.sitenav .home:hover{color:var(--ochre);}
+.sitenav .pages{display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
+.sitenav .pages a{font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:4px 10px;border-radius:20px;border:1px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s,background .15s;}
+.sitenav .pages a:hover{color:var(--ink);border-color:var(--line);background:var(--paper2);}
+.sitenav .pages a.active{color:var(--tide-deep);border-color:rgba(34,94,89,.35);background:rgba(54,128,122,.07);}
+.sitenav .divpipe{width:1px;height:18px;background:var(--line);margin:0 4px;flex-shrink:0;}
+
 </style>
 </head>
 <body>
+<nav class="sitenav" aria-label="Site navigation"><a class="home" href="index.html">The Provision Ground</a><div class="divpipe"></div><div class="pages"><a href="prospectus.html">01 · Prospectus</a><a href="strengths.html">02 · Ground Truth</a><a href="atlas.html">03 · Atlas</a></div></nav>
+<nav class="sitenav" aria-label="Site navigation"><a class="home" href="index.html">The Provision Ground</a><div class="divpipe"></div><div class="pages"><a href="prospectus.html">01 · Prospectus</a><a href="strengths.html">02 · Ground Truth</a><a href="atlas.html">03 · Atlas</a></div></nav>
 
 <!-- ============ COVER ============ -->
 <section class="sheet cover">
@@ -1363,5 +1376,6 @@ table.matrix tr:last-child td{border-bottom:0;}
   <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">34</span></div>
 </section>
 
+<script>const page=location.pathname.split('/').pop()||'index.html';document.querySelectorAll('.sitenav .pages a').forEach(a=>{if(a.getAttribute('href')===page)a.classList.add('active');});</script>
 </body>
 </html>
