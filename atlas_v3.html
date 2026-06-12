@@ -1,0 +1,1125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapping the Break — Interactive Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..500&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<style>
+:root{
+  --ink:#11212E; --indigo:#1E3A57; --tide:#36807A; --tide-deep:#225e59;
+  --ochre:#BE7B3A; --oxblood:#7C3327; --paper:#F5EFE3; --paper2:#ECE2D0;
+  --line:rgba(17,33,46,.15); --muted:#5a5043; --amber:#c08c3f;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--paper);color:var(--ink);font-family:'Spectral',Georgia,serif;-webkit-font-smoothing:antialiased;line-height:1.55;}
+.sg{font-family:'Space Grotesk',sans-serif;}
+.fr{font-family:'Fraunces',serif;}
+.eyebrow{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--tide-deep);}
+
+/* HEADER */
+header.top{padding:24px clamp(16px,4vw,44px) 18px;border-bottom:1px solid var(--line);background:var(--paper);}
+.proto-tag{display:inline-block;font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--oxblood);border:1px solid rgba(124,51,39,.35);border-radius:20px;padding:3px 10px;margin-bottom:10px;}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(24px,4vw,38px);line-height:1.03;letter-spacing:-.01em;margin:6px 0 4px;}
+.sub{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(13px,1.8vw,16px);color:var(--tide-deep);}
+.header-meta{display:flex;align-items:center;gap:16px;margin-top:12px;flex-wrap:wrap;}
+.header-meta a,.header-meta button{font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--tide-deep);background:none;border:1px solid rgba(34,94,89,.35);border-radius:20px;padding:4px 12px;cursor:pointer;text-decoration:none;transition:background .2s;}
+.header-meta a:hover,.header-meta button:hover{background:rgba(54,128,122,.1);}
+
+/* APP GRID */
+.app{display:grid;grid-template-columns:272px 1fr;gap:0;min-height:480px;}
+@media(max-width:860px){.app{grid-template-columns:1fr;}}
+
+/* CONTROL RAIL */
+.rail{padding:18px clamp(14px,2.5vw,22px);border-right:1px solid var(--line);background:var(--paper2);display:flex;flex-direction:column;gap:0;}
+@media(max-width:860px){.rail{border-right:0;border-bottom:1px solid var(--line);}}
+.rail-section{margin-bottom:20px;}
+.rail h2{font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600;}
+.layer{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid var(--line);cursor:pointer;}
+.layer:last-of-type{border-bottom:0;}
+.layer input{margin-top:2px;accent-color:var(--tide);width:14px;height:14px;flex-shrink:0;}
+.layer .sw{width:11px;height:11px;border-radius:2px;margin-top:3px;flex-shrink:0;}
+.layer .lt{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12px;color:var(--ink);}
+.layer .ld{font-size:11px;color:var(--muted);line-height:1.3;display:block;margin-top:1px;}
+
+.callout{background:rgba(54,128,122,.1);border-left:3px solid var(--tide);padding:10px 12px;border-radius:0 4px 4px 0;margin-top:4px;}
+.callout p{font-size:11.5px;color:var(--muted);line-height:1.4;}
+.callout em{color:var(--ink);}
+
+/* HOW TO READ */
+.how-to{background:rgba(190,123,58,.08);border-left:3px solid var(--ochre);padding:10px 12px;border-radius:0 4px 4px 0;margin-bottom:0;}
+.how-to p{font-size:11px;color:var(--muted);line-height:1.4;margin-bottom:5px;}
+.how-to p:last-child{margin-bottom:0;}
+.how-to strong{color:var(--ink);font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;display:block;margin-bottom:4px;}
+
+/* MAP */
+.mapwrap{position:relative;background:#0d1e2e;overflow:hidden;min-height:460px;}
+svg.map{display:block;width:100%;height:100%;min-height:460px;}
+.layer-group{transition:opacity .5s ease;}
+.geo-layer{transition:opacity .5s ease;}
+@media(prefers-reduced-motion:reduce){.layer-group,.geo-layer,.node{transition:none!important;}}
+.layer-group.off,.geo-layer.off{opacity:0!important;pointer-events:none;}
+.node{cursor:pointer;}
+.node:focus circle.halo{opacity:1!important;}
+
+/* TIME SLIDER */
+.timebar{padding:16px clamp(16px,4vw,44px) 14px;border-top:1px solid var(--line);background:var(--paper2);}
+.timebar .row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.timebar label{font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;white-space:nowrap;}
+input[type=range]{flex:1;min-width:180px;accent-color:var(--tide);height:4px;}
+.era{font-family:'Fraunces',serif;font-size:17px;color:var(--indigo);min-width:110px;font-weight:600;}
+.ticks{display:flex;justify-content:space-between;font-family:'Space Grotesk',sans-serif;font-size:9.5px;color:var(--muted);margin-top:4px;padding:0 2px;}
+
+/* ERA CHRONICLE — the big contextual section */
+.chronicle{border-top:2px solid var(--indigo);background:var(--paper);}
+.chronicle-header{padding:18px clamp(16px,4vw,44px) 12px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line);}
+.chronicle-header .chtitle{font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:var(--indigo);}
+.chronicle-header .chsub{font-family:'Fraunces',serif;font-style:italic;font-size:14px;color:var(--muted);}
+.chronicle-header .chera{font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--tide-deep);background:rgba(54,128,122,.1);border:1px solid rgba(54,128,122,.3);border-radius:20px;padding:3px 10px;}
+
+.chronicle-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0;border-bottom:1px solid var(--line);}
+.chcol{padding:18px clamp(16px,3vw,28px);border-right:1px solid var(--line);}
+.chcol:last-child{border-right:0;}
+@media(max-width:700px){.chcol{border-right:0;border-bottom:1px solid var(--line);}.chcol:last-child{border-bottom:0;}}
+.chcol .chlabel{font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:10px;}
+.chcol.ecology .chlabel{color:var(--tide-deep);}
+.chcol.demography .chlabel{color:var(--indigo);}
+.chcol.economy .chlabel{color:var(--amber);}
+.chcol.violence .chlabel{color:var(--oxblood);}
+.chcol p{font-size:13px;line-height:1.55;color:var(--ink);margin-bottom:8px;}
+.chcol p:last-child{margin-bottom:0;}
+.chcol .stat{font-family:'Space Grotesk',sans-serif;font-size:12px;color:var(--muted);padding:5px 0;border-top:1px solid var(--line);margin-top:8px;line-height:1.4;}
+.chcol .stat strong{color:var(--ink);font-weight:600;}
+
+.chronicle-quote{padding:20px clamp(16px,4vw,44px);background:var(--indigo);}
+.chronicle-quote blockquote{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(15px,2.2vw,18px);color:#c5dcd8;line-height:1.4;max-width:720px;}
+.chronicle-quote cite{display:block;font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#86c5bd;margin-top:10px;font-style:normal;}
+
+/* CHANGE INDICATOR STRIP */
+.change-strip{background:var(--paper2);border-top:1px solid var(--line);padding:14px clamp(16px,4vw,44px);}
+.change-strip h3{font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;font-weight:600;}
+.changes{display:flex;gap:12px;flex-wrap:wrap;}
+.change-pill{display:inline-flex;align-items:center;gap:6px;font-family:'Space Grotesk',sans-serif;font-size:11.5px;padding:5px 11px;border-radius:20px;border:1px solid;}
+.change-pill.down{color:#5d1a14;background:rgba(124,51,39,.1);border-color:rgba(124,51,39,.3);}
+.change-pill.up{color:#143d2b;background:rgba(54,128,122,.1);border-color:rgba(54,128,122,.3);}
+.change-pill.neutral{color:var(--muted);background:rgba(90,80,67,.07);border-color:rgba(90,80,67,.2);}
+
+/* DETAIL PANEL */
+.scrim{position:fixed;inset:0;background:rgba(17,33,46,.45);opacity:0;pointer-events:none;transition:opacity .3s;z-index:40;}
+.scrim.show{opacity:1;pointer-events:auto;}
+.panel{position:fixed;top:0;right:0;height:100%;width:min(460px,94vw);background:var(--paper);box-shadow:-14px 0 44px rgba(17,33,46,.25);transform:translateX(105%);transition:transform .4s cubic-bezier(.2,.7,.2,1);z-index:50;display:flex;flex-direction:column;overflow:hidden;}
+@media(prefers-reduced-motion:reduce){.panel{transition:none;}}
+.panel.open{transform:translateX(0);}
+.panel .phead{background:var(--indigo);color:#fff;padding:20px 22px 16px;flex-shrink:0;}
+.panel .phead .coord{font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.12em;color:#86c5bd;margin-top:3px;}
+.panel .phead h3{font-family:'Fraunces',serif;font-weight:600;font-size:21px;margin:0;line-height:1.1;}
+.panel .phead .pkind{font-family:'Space Grotesk',sans-serif;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#86c5bd;margin-bottom:4px;}
+.panel .ptabs{display:flex;border-bottom:1px solid var(--line);background:var(--paper2);flex-shrink:0;}
+.ptab{flex:1;font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;padding:10px 4px;border:0;background:none;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:color .15s,border-color .15s;}
+.ptab.active{color:var(--indigo);border-bottom-color:var(--tide);}
+.panel .pbody{padding:18px 22px;overflow-y:auto;flex:1;}
+.reg{margin-bottom:18px;}
+.reg .rl{font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;margin-bottom:7px;}
+.reg.data .rl{color:var(--tide-deep);}
+.reg.history .rl{color:var(--amber);}
+.reg.testimony .rl{color:var(--oxblood);}
+.reg ul{padding-left:16px;}
+.reg li{margin-bottom:4px;font-size:13.5px;}
+.reg p{font-size:13.5px;line-height:1.55;}
+.reg.testimony blockquote{font-family:'Fraunces',serif;font-style:italic;font-size:16px;color:var(--indigo);border-left:2.5px solid var(--tide);padding-left:13px;line-height:1.35;}
+.era-badge{display:inline-block;font-family:'Space Grotesk',sans-serif;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--tide-deep);background:rgba(54,128,122,.1);border:1px solid rgba(54,128,122,.25);border-radius:12px;padding:2px 8px;margin-bottom:8px;}
+.stat-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--line);font-size:13px;}
+.stat-row:last-child{border-bottom:0;}
+.stat-row .sk{color:var(--muted);}
+.stat-row .sv{font-family:'Space Grotesk',sans-serif;font-weight:600;color:var(--ink);}
+.pclose{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);border:0;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:17px;line-height:1;}
+.play{display:inline-flex;align-items:center;gap:7px;margin-top:10px;font-family:'Space Grotesk',sans-serif;font-size:11.5px;color:var(--tide-deep);background:none;border:1px solid var(--tide);border-radius:20px;padding:5px 12px;cursor:pointer;}
+.dl-btn{display:inline-flex;align-items:center;gap:7px;margin-top:8px;margin-left:8px;font-family:'Space Grotesk',sans-serif;font-size:11.5px;color:var(--muted);background:none;border:1px solid rgba(90,80,67,.3);border-radius:20px;padding:5px 12px;cursor:pointer;}
+.cite-note{font-family:'Space Grotesk',sans-serif;font-size:10px;color:var(--muted);margin-top:12px;padding-top:10px;border-top:1px solid var(--line);line-height:1.4;}
+
+/* ZOOM CONTROLS */
+.zoom-controls{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:4px;z-index:10;}
+.zoom-btn{width:28px;height:28px;background:rgba(17,33,46,.75);border:1px solid rgba(54,128,122,.4);border-radius:4px;color:#86c5bd;font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;transition:background .15s;}
+.zoom-btn:hover{background:rgba(54,128,122,.35);}
+.zoom-reset{font-size:10px;letter-spacing:.06em;}
+
+/* FOOTER */
+.hint{padding:10px clamp(16px,4vw,44px);font-size:12px;color:var(--muted);font-style:italic;text-align:center;background:var(--paper);border-top:1px solid var(--line);}
+footer.foot{padding:16px clamp(16px,4vw,44px) 24px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;background:var(--paper2);}
+footer .eb{font-family:'Space Grotesk',sans-serif;letter-spacing:.1em;text-transform:uppercase;font-size:10px;}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-family:'Space Grotesk',sans-serif;font-size:10px;color:#cdd6c8;padding:8px clamp(16px,4vw,44px);background:var(--ink);}
+.legend span{display:inline-flex;align-items:center;gap:5px;}
+.legend i{width:9px;height:9px;border-radius:50%;display:inline-block;border:1px solid #fff;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <span class="proto-tag">Design prototype · illustrative &amp; researched data</span>
+  <div class="eyebrow">Where the Tide Remembers · Companion to "Where the Map Begins"</div>
+  <h1>Mapping the Break — Interactive Atlas</h1>
+  <p class="sub">Every coordinate holds three things at once: the data, the history, and the testimony.</p>
+  <div class="header-meta">
+    <span class="sg" style="font-size:11px;color:var(--muted);">Cherryia White · M. Crichlow · CCDGB · Duke</span>
+    <button onclick="downloadAtlas()" title="Download atlas data as JSON">↓ Download data</button>
+    <a href="#how-to-read">How to read this atlas</a>
+    <button onclick="window.print()">Print / PDF</button>
+  </div>
+</header>
+
+<div class="app">
+  <!-- CONTROL RAIL -->
+  <aside class="rail" aria-label="Map layers">
+    <div class="rail-section">
+      <h2>Layers</h2>
+      <label class="layer"><input type="checkbox" data-layer="hist" checked><span class="sw" style="background:#BE7B3A"></span><span><span class="lt">Historical land use</span><span class="ld">Plantation &amp; colonial estate footprints, 1600–1865</span></span></label>
+      <label class="layer"><input type="checkbox" data-layer="flood" checked><span class="sw" style="background:#3f6f96"></span><span><span class="lt">Climate &amp; flood risk</span><span class="ld">Flood zones, sea-level exposure &amp; coastal erosion</span></span></label>
+      <label class="layer"><input type="checkbox" data-layer="tox"><span class="sw" style="background:#7C3327"></span><span><span class="lt">Toxicity corridors</span><span class="ld">Industrial &amp; Superfund sites, post-1900</span></span></label>
+      <label class="layer"><input type="checkbox" data-layer="demo"><span class="sw" style="background:#5b6b7a"></span><span><span class="lt">Race &amp; income</span><span class="ld">The racial geography of environmental risk</span></span></label>
+      <label class="layer"><input type="checkbox" data-layer="story" checked><span class="sw" style="background:#36807A"></span><span><span class="lt">Story nodes</span><span class="ld">Geotagged testimony, oral history &amp; media</span></span></label>
+    </div>
+
+    <div class="rail-section">
+      <h2>The signature move</h2>
+      <div class="callout">
+        <p>Fade <em>Historical land use</em> over <em>Climate &amp; flood risk</em> and watch the old estate boundaries trace today's flood edges. No caption needed — that convergence <em>is</em> the argument.</p>
+      </div>
+    </div>
+
+    <div class="rail-section" id="how-to-read">
+      <h2>How to read this atlas</h2>
+      <div class="how-to">
+        <p><strong>Nodes</strong>Teal = anchor site (deep research). Ochre = wider horizon site.</p>
+        <p><strong>Slider</strong>Drag through five centuries. The Chronicle below updates with what was happening — ecologically, demographically, economically — in that era.</p>
+        <p><strong>Layers</strong>Toggle to reveal what's hidden beneath the present. Each layer is a different register of the same violence.</p>
+        <p><strong>Panels</strong>Click any node to open three registers: the data, the history, and the testimony — each era-aware.</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAP -->
+  <div class="mapwrap" id="mapwrap">
+    <svg id="geomap" class="map" role="img" aria-label="Atlantic world atlas — geographic map with story nodes"></svg>
+    <div class="zoom-controls" aria-label="Map zoom">
+      <button class="zoom-btn" id="zoom-in"  title="Zoom in"  aria-label="Zoom in">+</button>
+      <button class="zoom-btn" id="zoom-out" title="Zoom out" aria-label="Zoom out">−</button>
+      <button class="zoom-btn zoom-reset" id="zoom-reset" title="Reset view" aria-label="Reset zoom">↺</button>
+    </div>
+    <div class="legend">
+      <span><i style="background:#36807A"></i> Anchor site</span>
+      <span><i style="background:#BE7B3A"></i> Horizon site</span>
+      <span style="color:#d9a566">— — passage routes</span>
+      <span id="map-loading" style="color:#86c5bd;font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.1em;">Loading geography…</span>
+    </div>
+  </div>
+</div>
+
+<!-- TIME SLIDER -->
+<div class="timebar">
+  <div class="row">
+    <label for="time">Read across time</label>
+    <input type="range" id="time" min="0" max="4" value="3" step="1" aria-describedby="eranote">
+    <span class="era" id="era" aria-live="polite">1970–2026</span>
+  </div>
+  <div class="ticks"><span>pre-1600</span><span>1600–1865</span><span>1865–1970</span><span>1970–2026</span><span>2026 →</span></div>
+</div>
+
+<!-- ERA CHRONICLE -->
+<section class="chronicle" id="chronicle" aria-label="Historical chronicle for current era">
+  <div class="chronicle-header">
+    <span class="chera" id="chera-tag">1970–2026</span>
+    <span class="chtitle" id="chtitle">The present moment</span>
+    <span class="chsub" id="chsub">Climate vulnerability inherited from everything before it</span>
+  </div>
+  <div class="chronicle-grid" id="chronicle-grid">
+    <!-- populated by JS -->
+  </div>
+  <div class="chronicle-quote" id="chronicle-quote">
+    <!-- populated by JS -->
+  </div>
+</section>
+
+<!-- CHANGE INDICATOR STRIP -->
+<div class="change-strip" id="change-strip">
+  <h3>What is changing across this period</h3>
+  <div class="changes" id="changes-list"></div>
+</div>
+
+<p class="hint">Tap any teal or ochre node to open its three registers — data, history, testimony. Drag the time slider to move through five centuries. The chronicle below the map updates with every era.</p>
+
+<footer class="foot">
+  <span class="eb">Where the Map Begins · Vol. II · Companion prototype</span>
+  <span class="eb">Cherryia White · for M. Crichlow · CCDGB · Duke</span>
+  <span style="font-style:italic;font-size:11px;">Illustrative data grounded in historical record · prototype 2024</span>
+</footer>
+
+<!-- DETAIL PANEL -->
+<div class="scrim" id="scrim"></div>
+<aside class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="pname" aria-hidden="true">
+  <div class="phead">
+    <button class="pclose" id="pclose" aria-label="Close panel">×</button>
+    <div class="pkind" id="pkind"></div>
+    <h3 id="pname">—</h3>
+    <div class="coord" id="pcoord"></div>
+  </div>
+  <div class="ptabs" id="ptabs">
+    <button class="ptab active" data-tab="data">Data</button>
+    <button class="ptab" data-tab="history">History</button>
+    <button class="ptab" data-tab="testimony">Testimony</button>
+  </div>
+  <div class="pbody" id="pbody"></div>
+</aside>
+
+<script>
+// ============================================================
+// NODE DATA — era-aware, three registers each
+// ============================================================
+const NODES = [
+  {
+    id:'sthelena', x:178, y:198, kind:'anchor',
+    name:'St. Helena Island',
+    region:'Gullah Geechee Corridor · South Carolina',
+    coord:'32.37° N, 80.58° W',
+    eras:{
+      0:{data:['Tidal marsh and longleaf pine coastal plain','Sea-island cotton not yet planted','Home to Yemassee and earlier Indigenous peoples','No plantation infrastructure'],history:'Before 1600, St. Helena Island sat at the edge of a vast Gullah-speaking sea-island world that would not exist for another century. The Yemassee and Cusabo peoples maintained complex fishing economies, burning and tending the land in cycles that kept the marsh productive. European contact began in the 1520s with a failed Spanish mission, Punta de Santa Elena, which the Spanish abandoned after sustained Indigenous resistance.',testimony:'This ground has been held before. It was held here before cotton, before slavery, before any deed said it belonged to another.'},
+      1:{data:['Sea-island long-staple cotton introduced c.1790','By 1860: 64 plantations, avg. 100 enslaved people each','~6,000 enslaved people on the island, outnumbering white residents 5:1','Systematic drainage of marsh for field expansion'],history:'St. Helena became one of the most intensive plantation zones in North America. The fine-fiber Sea Island cotton grown here was worth three times the price of inland cotton on British markets. The island\'s enslaved African population — largely Wolof, Mandinka, and Kongo in origin — developed the Gullah language and culture that persists today. The 1861 "Port Royal Experiment" brought the island under Union control; enslaved people left the plantations before federal troops arrived.',testimony:'My grandmother told me: they never left. When the masters left, we stayed. We\'ve always been the ones who stayed.'},
+      2:{data:['Penn Center founded 1862 as first school for freed people','Land redistribution reversed after 1876 Compromise','Many freedpeople lost land through tax sales, 1880–1930','Gullah language and fishing economy maintained'],history:'After emancipation, freedpeople on St. Helena purchased land through the direct-deed system established during the Port Royal Experiment — one of the few places in the South where Black land ownership became structurally possible. By the early 20th century, however, tax manipulation, legal violence, and the collapse of Reconstruction had stripped much of this land away. The Gullah language and cultural practices survived precisely because the island remained relatively isolated from mainland infrastructure.',testimony:'We lost the land twice — once to the master, and once to the tax office. My grandfather watched both.'},
+      3:{data:['Flood zone AE: 1% annual chance inundation','EJSCREEN: 88th percentile composite score','Tidal marsh loss: −19% over 30 years','Sea-level rise projection: +1.5–2.5 ft by 2100','Heritage sites: 24 at direct flood risk'],history:'Today St. Helena is one of the most climate-exposed sites on the Atlantic coast, and one of the last places where Gullah Geechee culture survives as a living community practice rather than a heritage display. The same low-lying geography that made the land valuable for plantation agriculture now makes it radically vulnerable to sea-level rise, storm surge, and salt intrusion. Displacement is already underway through a combination of flood insurance pricing, property tax increases driven by coastal development, and infrastructure neglect.',testimony:'My grandmother read the tide the way you read a clock — she knew the water before the water knew itself. Now we read it for a different reason.'},
+      4:{data:['Gullah Geechee Cultural Heritage Corridor protections','Community-led land trust movement expanding','Climate migration pressure from Charleston metro','Proposed federal relocation funds debated'],'history':'The future of St. Helena is being actively contested. Community land trusts are attempting to prevent the displacement of Gullah Geechee families through collective ownership, while climate adaptation plans are being developed that center cultural continuity rather than abandonment. The question is whether the land that was held through slavery, survived Reconstruction, and endured the 20th century can survive the 21st — not through displacement, but through transformation on its own terms.',testimony:'If the water comes for us, we want it known: we were here first and longest. We do not intend to be moved again.'}
+    }
+  },
+  {
+    id:'louisiana', x:150, y:298, kind:'anchor',
+    name:'Louisiana · Cancer Alley',
+    region:'Lower Mississippi River Corridor',
+    coord:'30.25° N, 91.10° W',
+    eras:{
+      0:{data:['Bottomland hardwood and cypress swamp','Mississippi River natural levees, rich alluvial soil','Home to Houma, Natchez, and Tunica peoples','No plantation infrastructure; trade networks active'],history:'Before European contact, the lower Mississippi River corridor was one of the most ecologically rich and densely populated areas in North America. The mound-building cultures of the Mississippian tradition — including the Natchez people, who maintained a living version of this society into the 18th century — had developed sophisticated riverine agriculture and trade systems that used the annual flood cycle rather than fighting it.',testimony:'The river was a road. You read it the way you read a face — it told you everything if you knew how to look.'},
+      1:{data:['Sugar cane production dominant post-1795','By 1860: over 350,000 enslaved people in Louisiana','Sugarcane required year-round brutal labor regime','Systematic clearing of cypress swamp for fields'],history:'The Louisiana sugar industry created one of the most violent labor regimes in the hemisphere. Unlike cotton, sugarcane required crushing labor year-round — particularly during the winter "grinding" season when overwork and exposure killed enslaved workers at alarming rates. Planters imported enslaved people from the Upper South specifically because they expected them to die. The river\'s natural levee system was extended by enslaved labor into an elaborate drainage infrastructure that made the interior swamps cultivable.',testimony:'They built the canal with their hands and buried their dead beside it. The land here is built on bones.'},
+      2:{data:['Standard Oil refinery, Baton Rouge, 1909','Petrochemical corridor established along old plantation belt','Great Migration of Black Louisianans, 1910–1940','Remaining Black farming communities enclosed by industrial zoning'],history:'The petrochemical transformation of the River Road did not displace the plantation geography — it inherited it. Refineries and chemical plants were sited on former plantation land along the same corridor where enslaved people had built the infrastructure. Black communities were surrounded, not relocated, with industrial facilities permitted directly adjacent to homes and schools. The environmental justice implications of this pattern — the same land, the same families, new poison — only became legally contested in the 1980s.',testimony:'They built the plants on the cane fields. Same land, same families, new poison. My mother\'s yard backed up to the fence.'},
+      3:{data:['150+ petrochemical facilities in the corridor','Cancer risk 50x national average in some census tracts','Repeated hurricane displacement: Katrina (2005), Ida (2021)','Coastal land loss: Louisiana loses a football field every 100 minutes','Black residents: 50–80% of most-exposed communities'],history:'Cancer Alley is now the most documented environmental injustice corridor in the United States. The legal battles fought by residents of St. John the Baptist Parish, St. James Parish, and other communities against proposed and existing facilities represent a direct line from the plantation economy to the present. Hurricane Katrina in 2005 and Ida in 2021 accelerated displacement that the petrochemical corridor had been causing slowly for decades. The same communities bear both burdens.',testimony:'Cancer Alley isn\'t a metaphor. My father died of it. My neighbor. The man across the street. It has names.'},
+      4:{data:['Sharon Lavigne / RISE St. James legal victories, 2022–23','Formosa Plastics permit revoked, 2022','Coastal restoration funded but contested in timeline','Climate refugee projections: 1–2 million by 2050'],history:'A new generation of legal and organizing strategies — led by groups like RISE St. James, Inclusive Louisiana, and the Deep South Center for Environmental Justice — has begun winning permits fights that were considered unwinnable. The terrain of struggle has shifted from documentation to litigation, and the arguments are no longer purely environmental but explicitly connect to the history of slavery and environmental racism. The future depends on whether this legal momentum can outpace the pace of coastal loss.',testimony:'We are not leaving this land. Our ancestors were brought here against their will. We will not be moved again against ours.'}
+    }
+  },
+  {
+    id:'barbados', x:224, y:330, kind:'anchor',
+    name:'Barbados',
+    region:'Eastern Caribbean · Windward Islands',
+    coord:'13.19° N, 59.54° W',
+    eras:{
+      0:{data:['Covered with tropical dry forest and dense scrub','Small Arawak-speaking Taíno population by 1200 CE','By 1536: island reported "uninhabited" by Portuguese explorers','No plantation infrastructure'],history:'Before European settlement, Barbados was home to the Arawak and later Kalinago peoples, though the island had been largely depopulated by European-introduced disease and slaving raids before English colonization in 1627. The landscape was dense tropical dry forest. Its later complete deforestation for sugar is one of the most total ecological transformations in the colonial Caribbean.',testimony:'There was a forest here before any of us. It doesn\'t appear on maps because the maps were made after it was gone.'},
+      1:{data:['Sugar monoculture from 1640s; earliest Caribbean plantation system','By 1680: 17 enslaved Africans per white resident','~87,000 enslaved people on a 166-square-mile island by 1800','Complete deforestation; 90% of land under cane'],history:'Barbados was the laboratory of the Atlantic plantation system. The model of intensive sugar monoculture combined with mass African enslavement was developed here in the 1640s and exported to Jamaica, South Carolina, and Brazil. The island\'s complete deforestation — accomplished within decades of English settlement — eliminated its fresh water storage capacity, made it dependent on food imports, and created the conditions for the chronic soil exhaustion that still affects the island today. The Barbados slave codes of 1661 became the template for slave law across the British empire.',testimony:'We were the first sugar colony. We did not ask to be the model for what followed.'},
+      2:{data:['Emancipation 1834, but apprenticeship kept workers on plantations until 1838','Barbados Labour Party founded 1938; universal suffrage 1950','Independence 1966 under Errol Barrow','Tourism begins replacing sugar as dominant economy, 1950s–60s'],history:'Barbados\'s post-emancipation history is marked by the persistence of the plantation power structure long after formal slavery ended. The landed class retained control of land and labor through apprenticeship, debt, and the suppression of alternative land access. The labor movement of the 1930s, led by figures including Clement Payne, finally broke the political hold of the planter class and set the stage for independence. The shift to tourism traded one form of colonial economy for another, though on terms more favorable to the island.',testimony:'My grandfather worked the same field his grandfather worked. The cane changed hands. The families didn\'t.'},
+      3:{data:['Republic since November 30, 2021','Coral reef cover loss: −80% since 1970','Sea-level rise exposure: 40% of population within 1km of coast','National climate-adaptation framework in place','SIDS classification: among most climate-vulnerable nations'],history:'Barbados\'s declaration as a republic in 2021, removing the British monarch as head of state, was widely read as the final step in a post-colonial sovereignty project. Prime Minister Mia Mottley has made Barbados one of the most visible advocates for climate finance reform at international negotiations, arguing explicitly that the climate debt owed to small island states by industrialized nations is an extension of the colonial debt never repaid. The ecological vulnerability that colonial extraction created is now being felt most acutely.',testimony:'We were the first sugar colony. We intend to be the first to refuse what it left us. Sovereignty means choosing our own future.'},
+      4:{data:['Bridgetown Initiative: debt relief for climate finance','Mottley leading Global South climate coalition','Blue economy transitions underway','Coral restoration projects at scale'],'history':'Barbados under Mia Mottley is pursuing a "Bridgetown Initiative" that would restructure international financial institutions to provide debt relief and concessional climate finance to small island and developing states. The argument is that the same global economy that enriched industrialized nations through the plantation system is now generating the climate emissions that threaten the descendants of those plantations with displacement. The future of Barbados depends on whether the world\'s financial architecture can be remade fast enough.',testimony:'The island survived sugar. It survived colonialism. It will survive this too — if the world lets it.'}
+    }
+  },
+  {
+    id:'jamaica', x:118, y:348, kind:'horizon',
+    name:'Jamaica',
+    region:'Greater Antilles · Caribbean',
+    coord:'18.11° N, 77.30° W',
+    eras:{
+      0:{data:['Taíno population of ~600,000 at contact (1494)','Complex agricultural system; cassava, maize, yam','Fishing and coastal trade economies','Dense forest covering most of island'],history:'The Taíno of Jamaica called the island Xaymaca, "land of wood and water." They maintained a sophisticated agricultural system combining managed forest, conuco (mound) cultivation, and coastal fishing. The Spanish arrived in 1494; within 50 years, the entire Taíno population had been effectively destroyed through disease, enslavement, and massacre.',testimony:'They named this island for what it was. Wood and water. Then came the ones who cut the first and drained the second.'},
+      1:{data:['British capture 1655; sugar monoculture from 1660s','By 1800: 300,000 enslaved Africans, 10,000 white colonists','Maroon War 1739: Maroons win legal autonomy in mountains','Most valuable British colony per acre, 18th century'],history:'Jamaica became Britain\'s most profitable colony, generating fortunes that funded industrialization in England. The Maroon communities — descendants of enslaved people who escaped to the mountains and fought two wars for their freedom — represent one of the hemisphere\'s most significant histories of armed resistance. The provision grounds maintained by enslaved people in the mountains and on plantation margins became the basis of the post-emancipation peasant economy.',testimony:'The provision ground fed us when the estate would not. My grandmother knew every plant by name and use. It still does.'},
+      2:{data:['Independence 1962','Michael Manley\'s democratic socialism, 1972–80','IMF structural adjustment programs dismantle social services, 1980s–90s','Small-farmer land practices remain','SALISES/UWI Mona becomes research anchor'],history:'Jamaican independence in 1962 was followed by a period of ambitious social reform under Michael Manley that included land redistribution, bauxite nationalization, and alignment with the Global South non-aligned movement. IMF structural adjustment programs imposed after the 1980 election effectively dismantled this project, cutting education, health, and agriculture spending in exchange for debt servicing. The small-farmer tradition — rooted in the provision ground — survived as both a cultural and food security practice.',testimony:'We learned to farm without being taught, because the food we grew was the food we ate. That knowledge doesn\'t disappear.'},
+      3:{data:['Hurricane &amp; drought exposure intensifying','Bauxite mining degrading upland watersheds','SALISES research on food sovereignty and land rights','Remittances: 16% of GDP (2023)','Coral reef bleaching events increasing'],history:'Jamaica today faces the intersection of climate vulnerability, a debt-driven agricultural crisis, and the continuing extraction of bauxite from upland soils. The remittance economy — Jamaicans abroad sending money home — has become the largest single income source for many communities, representing a diaspora subsidy that holds together what structural adjustment broke apart. SALISES (the Sir Arthur Lewis Institute of Social and Economic Studies) at UWI Mona has been a key intellectual hub for theorizing Caribbean food sovereignty and climate justice.',testimony:'The provision ground is still there. Smaller now, but still there. We haven\'t forgotten how to use it.'},
+      4:{data:['Climate-smart agriculture investments expanding','Maroon land rights recognition campaigns','Caribbean Community climate finance advocacy','Food sovereignty movement connecting diaspora to homeland'],history:'Jamaica\'s future is being shaped by a convergence of climate adaptation, land rights, and food sovereignty organizing that draws directly on the provision-ground tradition. The argument that post-emancipation small-farming practices are not just cultural heritage but active climate adaptation strategies is gaining traction in both research and policy circles. The diaspora connection — Jamaicans in London, New York, and Toronto — is increasingly seen as a resource for both remittances and advocacy.',testimony:'What the provision ground taught us is what the future needs. How to grow without destroying. How to eat without extracting.'}
+    }
+  },
+  {
+    id:'bahia', x:208, y:392, kind:'horizon',
+    name:'Bahia, Brazil',
+    region:'Recôncavo · Atlantic coast',
+    coord:'12.97° S, 38.51° W',
+    eras:{
+      0:{data:['Atlantic Forest intact; among most biodiverse in world','Tupinambá and other coastal peoples','Rich riverine and fishing economies','No plantation infrastructure'],history:'The Recôncavo region of Bahia — the bay surrounding Salvador — was home to dense Atlantic Forest and complex Tupinambá communities before Portuguese colonization. The Atlantic Forest of Brazil is now one of the most endangered biomes on earth; less than 12% of its original extent remains, nearly all of it destroyed for sugar, coffee, and cattle agriculture.',testimony:'There was a forest here that covered the world. The names of the rivers still carry it, even where the trees are gone.'},
+      1:{data:['Largest enslaved African population in the Americas','~5 million enslaved Africans imported to Brazil, 1500–1888 (40% of Atlantic trade)','Salvador da Bahia was capital of Portuguese empire','Quilombo dos Palmares: c. 30,000 people, destroyed 1694'],history:'Brazil received more enslaved Africans than any other destination in the Atlantic slave trade. The Recôncavo became the heart of the sugar economy and the most concentrated site of African religious and cultural survival in the Americas. The quilombo tradition — communities of escaped enslaved people in the interior — produced Palmares, the largest African-descended free community in the hemisphere before its destruction by Portuguese and Paulista forces in 1694. Candomblé, Capoeira, and the worship of the orixás developed in Bahia as survival and resistance practices.',testimony:'The orixás are of the water and the forest. To defend them is to defend the river. This is not metaphor.'},
+      2:{data:['Slavery not abolished until 1888 — last in the Americas','Quilombo land rights contested throughout 20th century','Candomblé terreiros (sacred lands) recognized but threatened','Salvador: largest Afro-descendant population of any city outside Africa'],history:'Brazil\'s late abolition in 1888 — the last country in the Americas to end slavery — was followed by a racial "whitening" policy that systematically excluded Afro-Brazilians from land, education, and civic life. The quilombo communities that survived became the basis of the quilombola land rights movement, which won constitutional recognition in 1988 but has faced violent backlash from agribusiness and ranching interests throughout the 21st century.',testimony:'My family\'s terreiro has been here for seven generations. They keep trying to take it. We keep being here when they come.'},
+      3:{data:['Quilombo land struggles: 1,500+ communities awaiting title (2024)','Salvador: most violent city for Afro-Brazilian youth','Atlantic Forest: 12% remaining','Coastal flooding threatens Pelourinho heritage district','Afro-Brazilian religions targeted in religious violence'],history:'Bahia today is both a center of Afro-Atlantic cultural survival and a site of intense violence against Black communities. The quilombola land rights movement has won legal recognition but the pace of titling has been glacially slow under both PSDB and PT governments, and under Bolsonaro it reversed entirely. Candomblé terreiros are under increasing attack from evangelical political mobilization. The same logic that destroyed the Atlantic Forest and enslaved millions now expresses itself through religious persecution and land theft.',testimony:'We are still here. They have been trying to remove us since 1500. We are still here.'},
+      4:{data:['Lula government quilombo titling acceleration (2023–)','Candomblé intangible heritage protections expanding','Atlantic Forest restoration coalitions','CELAC and South-South cooperation frameworks'],history:'The Lula government\'s return in 2023 has accelerated quilombo land titling and offered more protection for Afro-Brazilian religious communities. But the structural forces — evangelical political mobilization, agribusiness lobbying, and the slow-violence of urban poverty — remain powerful. The future of Bahia as an Afro-Atlantic cultural center depends on whether these legal protections can be made durable and whether the Atlantic Forest restoration movement can reclaim what centuries of extraction destroyed.',testimony:'The orixás do not ask to be remembered. They ask to be alive. The land is where they live.'}
+    }
+  },
+  {
+    id:'belize', x:92, y:306, kind:'horizon',
+    name:'Belize',
+    region:'Caribbean coast · Central America',
+    coord:'17.19° N, 88.49° W',
+    eras:{
+      0:{data:['Classic Maya civilization at peak, 250–900 CE','Sophisticated water management, milpa agriculture','Dense tropical forest; Mesoamerican Barrier Reef intact','Post-Classic Maya populations, c. 1500'],history:'Belize contains some of the most significant Maya archaeological sites in the world — Caracol, Xunantunich, Lamanai — representing a civilization that at its height in the Classic period supported population densities exceeding modern Belize. The milpa system of rotating forest agriculture, combined with sophisticated water management including reservoirs, channels, and raised fields, maintained large populations without the ecological destruction that European monoculture would later produce.',testimony:'My people\'s cities are under the ground here. You call it jungle. We call it memory.'},
+      1:{data:['British Honduras established for logwood cutting, 1600s','Garifuna arrived after second Carib War deportation, 1797','Mahogany extraction replaced logwood by 1800s','Enslaved Africans, then "liberated" Africans brought for logging'],history:'British Honduras (now Belize) was established not for plantation agriculture but for extraction — first logwood for European dyes, then mahogany for furniture. This created a different but equally destructive colonial economy. The Garifuna people — descendants of Kalinago, Arawak, and African communities in St. Vincent — were deported by the British after the Second Carib War in 1797 and settled along the Central American coast, where they developed one of the most distinctive Afro-Indigenous cultures in the hemisphere.',testimony:'We were brought here against our will and told this was our home. We made it our home. The sea taught us how.'},
+      2:{data:['Independence 1981','Garifuna cultural preservation movement grows, 1970s–80s','Barrier reef under increasing fishing pressure','Garifuna language recognized as UNESCO endangered heritage (2001)'],history:'Belize\'s independence in 1981 was among the last in the Caribbean. The Garifuna community, spread across Belize, Guatemala, Honduras, and Nicaragua, developed a cultural preservation movement that has become one of the most effective in the Caribbean — producing internationally recognized music (punta rock), dance, and language preservation programs. The Garifuna language, combining Kalinago, Arawak, French, English, and Yoruba elements, is now listed as UNESCO Intangible Cultural Heritage.',testimony:'The language remembers everything the history forgot. You can hear Africa and the islands in every word.'},
+      3:{data:['Mesoamerican Barrier Reef: 50% bleached or dead (2024)','Garifuna coastal communities directly sea-level exposed','Hurricane and tropical storm intensification','Mangrove loss threatening fishing economies','Garifuna population: ~600,000 total across region'],history:'Belize\'s Garifuna communities sit at the intersection of climate exposure and cultural survival. The mangrove ecosystems that the Garifuna have managed as fishing habitat for generations are under threat from coastal development and sea-level rise. The barrier reef that anchors the coastal economy is bleaching. And the broader Garifuna diaspora — concentrated in New York, Los Angeles, and Houston — increasingly supports Caribbean communities through remittances that are themselves under pressure from the economic precarity that climate exposure creates.',testimony:'The mangrove is the wall the ancestors planted. Cut it and the sea walks in. We have been saying this for a generation.'},
+      4:{data:['Garifuna land rights legal campaigns','Reef restoration funded through blue bond mechanisms','Cultural-ecological knowledge documentation programs','Climate diaspora organizing expanding'],history:'The future of Garifuna coastal culture in Belize is being contested through a combination of legal land rights work, ecological restoration, and cultural documentation. The concept of "biocultural rights" — the idea that the right to culture is inseparable from the right to the ecological systems that culture depends on — is being developed by Garifuna legal advocates as a framework for climate adaptation that centers community continuity rather than managed retreat.',testimony:'We did not survive everything we survived in order to be relocated. We will adapt. But we will adapt here.'}
+    }
+  },
+  {
+    id:'ghana', x:658, y:178, kind:'horizon',
+    name:'Ghana · Cape Coast',
+    region:'Gulf of Guinea · West Africa',
+    coord:'5.10° N, 1.25° W',
+    eras:{
+      0:{data:['Akan kingdoms; Denkyira, Akwamu, Fante coastal states','Active trans-Saharan and coastal trade networks','Gold trade established by 9th century CE','Dense tropical forest inland; savannah north'],history:'The region now called Ghana was home to a succession of powerful states — the Ghana Empire (from which the modern nation takes its name) was a trans-Saharan trading power from the 4th to 13th centuries CE. The coastal Fante and Akan peoples were sophisticated traders who, before the Atlantic slave trade, maintained networks connecting the forest gold fields to the Saharan routes and eventually to Portuguese and Dutch traders.',testimony:'We traded gold and cloth before they came for our people. The coast knew commerce long before it knew what was being sold.'},
+      1:{data:['Portuguese contact 1471; first European fort 1482','Elmina Castle: earliest European building sub-Saharan Africa','Cape Coast Castle: British slaving headquarters from 1664','Estimated 12 million enslaved people passed through Ghanaian ports'],history:'Cape Coast and Elmina are the most significant departure points in the African history of the Atlantic slave trade. Cape Coast Castle, which sits on the ocean, held enslaved people in its sub-waterline dungeons before they were walked through the "Door of No Return" into the Atlantic. The castle was also the administrative center of British Gold Coast colonial rule, creating a physical superimposition of slave trading and colonial governance on the same site that remains visible today.',testimony:'The door faced the water. Everything after it was the water\'s story. The castle is still there. The door is still there.'},
+      2:{data:['Independence 1957 under Kwame Nkrumah','Pan-African headquarters established in Accra','Cocoa economy replaces slave trade as colonial extraction','Volta River Dam displaces 80,000 Ghanaians (1966)'],history:'Ghana\'s independence in 1957 under Kwame Nkrumah was the first in sub-Saharan Africa and a catalyst for decolonization across the continent. Nkrumah\'s pan-African project — which he envisioned as a continental union — was ended by a CIA-backed coup in 1966. The Volta River Dam project, which Nkrumah initiated and which displaced 80,000 Ghanaians (disproportionately from the Volta Basin), exemplified the ambivalence of post-colonial development: modernization and displacement in the same gesture.',testimony:'Independence was supposed to mean the land was ours again. For the 80,000 moved by the dam, it meant something else.'},
+      3:{data:['Coastal erosion at heritage sites; Cape Coast Castle at risk','Fishing-economy disruption from industrial trawling','Year of Return (2019): diaspora reconnection movement','Climate exposure: coastal flooding and inland drought'],history:'Cape Coast today faces the irony of being both a UNESCO World Heritage site and a community under threat from the same Atlantic it once faced across for a different reason. Coastal erosion — accelerated by climate change and the disruption of longshore drift by coastal development — is threatening the foundations of Cape Coast Castle itself. The Year of Return initiative in 2019 brought tens of thousands of diaspora Africans to Ghana, creating a powerful political and cultural moment connecting the Atlantic passage to contemporary pan-African identity.',testimony:'We kept the door open so the ones who left would know how to come back. Now we keep it open for a different reason.'},
+      4:{data:['Diaspora investment in coastal heritage preservation','Atlantic charter for climate justice from Ghana-led SIDS coalitions','Community fishing rights legislation','Pan-African climate finance advocacy'],history:'Ghana is positioning itself as a leader in the pan-African response to climate change, connecting its coastal vulnerability to a broader argument about the climate debt owed to African nations by industrialized countries. The diaspora reconnection movement — building on the Year of Return — is being mobilized as a resource for both cultural heritage and climate advocacy. The future of Cape Coast as a living community rather than a heritage site depends on whether these political arguments can be translated into material resources.',testimony:'The water that carried them away is the same water rising now. We know what it takes to endure. We are still here.'}
+    }
+  },
+  {
+    id:'senegal', x:662, y:250, kind:'horizon',
+    name:'Senegal · Gorée Island',
+    region:'Cap-Vert Peninsula · West Africa',
+    coord:'14.67° N, 17.40° W',
+    eras:{
+      0:{data:['Wolof and Serer kingdoms; Jolof Empire, 14th–16th century','Sophisticated agricultural and fishing economy','Coastal trade with Saharan networks','Cap-Vert: strategic peninsula at westernmost point of Africa'],history:'Gorée Island sits at the westernmost point of the African continent, facing the Atlantic. Before European contact, it was inhabited by Lebou fishermen and was part of the Jolof Empire\'s sphere of influence. The island\'s strategic position at the continental edge made it among the first West African sites to attract Portuguese attention in the 1440s.',testimony:'This is where Africa ends and the water begins. We have always known what the water carries and what it takes.'},
+      1:{data:['Portuguese, Dutch, British, and French all held Gorée','House of Slaves (Maison des Esclaves) built c. 1776','Significant slave-trading site, particularly 17th–18th century','Gorée changed hands 13 times between European powers'],history:'Gorée Island was one of the most significant sites in the Atlantic slave trade, though historians debate the scale of embarkation there relative to other ports. What is certain is that the island served as a processing and holding station, and the House of Slaves — with its "Door of No Return" facing the Atlantic — has become one of the most powerful memorial sites for the trade. The island changed hands between European powers thirteen times between 1444 and 1815.',testimony:'The island remembers leaving. The door still faces the Atlantic. Every president who comes to see it stands where the enslaved stood.'},
+      2:{data:['Senegal independence 1960 under Léopold Sédar Senghor','Négritude literary and philosophical movement','Gorée declared UNESCO World Heritage Site, 1978','Dakar becomes major regional cultural capital'],history:'Léopold Sédar Senghor, Senegal\'s first president and co-founder of the Négritude literary movement with Aimé Césaire of Martinique, made Senegal one of the intellectual centers of post-colonial Africa. Gorée\'s designation as a UNESCO World Heritage Site in 1978 transformed it into a site of Atlantic memory and diaspora pilgrimage — visited by Nelson Mandela, Pope John Paul II, Bill Clinton, and Barack Obama, who each stood at the Door of No Return and acknowledged the history it represented.',testimony:'Senghor said: I am both a Black man and a Frenchman. He was saying: I contain the wound and the language of those who made it. That is what Gorée means.'},
+      3:{data:['Island erosion and storm surge increasing','Heritage site vulnerability: House of Slaves under sea-level risk','Atlantic departure node for contemporary migration','Dakar: 3.3 million in coastal flood zone','Sahel desertification driving internal migration'],history:'Gorée Island today faces the paradox of being both a memorial to Atlantic displacement and a place itself threatened by rising seas. The House of Slaves, which stands on the water\'s edge, is increasingly exposed to storm surge and erosion. Simultaneously, Senegal has become one of the major departure points for contemporary migration across the Atlantic — young people from the Sahel and beyond making the same crossing, in smaller boats, that enslaved people made in the hold. The political and ecological pressure is immense.',testimony:'The island remembers leaving. Now the island itself is asked to leave. We refuse to let it.'},
+      4:{data:['WAEMU climate adaptation frameworks','Gorée preservation fund international coalition','Dakar coastal resilience plans','Diaspora-climate organizing linking Senegal to France and US'],history:'Senegal\'s future involves an argument about who gets to be remembered and what is worth preserving. The Gorée preservation movement is connecting coastal heritage protection to the broader argument that the nations most responsible for climate change owe a specific debt to the sites of the slave trade that their economies were built on. The Dakar coastal resilience plans attempt to address sea-level rise while also managing the migration pressures that Sahel desertification is generating.',testimony:'We will not let the water erase what the water brought back to us. The memory is ours to keep.'}
+    }
+  },
+  {
+    id:'zanzibar', x:715, y:330, kind:'horizon',
+    name:'Zanzibar',
+    region:'Indian Ocean · Swahili Coast · Tanzania',
+    coord:'6.16° S, 39.20° E',
+    eras:{
+      0:{data:['Bantu-speaking coastal peoples, 1st millennium CE','Indian Ocean trade networks: Arab, Persian, Indian merchants','Swahili culture emerges from Indian Ocean synthesis','Dhow navigation; seasonal monsoon calendar'],history:'Zanzibar and the Swahili coast represent an Indian Ocean Atlantic parallel to the Atlantic world: a place where African, Arab, Persian, and Indian cultures synthesized into a distinctive civilization over more than a thousand years of maritime trade. The Swahili language — a Bantu language with Arabic loanwords — is the product of this synthesis. The ecological knowledge embedded in Swahili culture, particularly around mangrove management and reef fishing, represents centuries of accumulated observation.',testimony:'We navigated by the monsoon. The wind told us when to go and when to come back. The sea was not an obstacle — it was a road.'},
+      1:{data:['Oman conquers Zanzibar 1698; Sultanate established','Clove monoculture introduced 1818 by Sultan Seyyid Said','East African slave trade: ~600,000 enslaved people, 1800–1873','Zanzibar City becomes largest city in sub-Saharan Africa (mid-19th century)'],history:'Zanzibar under the Omani sultanate became the center of the East African slave trade and the world\'s largest clove producer. The clove economy — like the Atlantic sugar economy — was built on enslaved labor, mostly drawn from the mainland interior through Swahili Arab slaving networks. The British forced the abolition of the slave trade in 1873 under treaty pressure, but the plantation system continued. Zanzibar\'s Stone Town, with its carved wooden doors and coral-stone architecture, is the physical embodiment of this Indian Ocean colonial world.',testimony:'Our grandfathers planted clove for masters. The scent still fills the air. Now we ask: who does the harvest belong to?'},
+      2:{data:['Zanzibar Revolution 1964: Sultan deposed','Merger with Tanganyika to form Tanzania, 1964','Clove economy nationalized then privatized','Swahili language becomes Tanzania\'s national language'],history:'The Zanzibar Revolution of January 1964 — in which the Afro-Shirazi Party overthrew the Arab sultan and killed or expelled much of the Arab and South Asian merchant class — was one of the most radical post-colonial upheavals in Africa. Within months, Zanzibar merged with mainland Tanganyika to form Tanzania under Julius Nyerere. The revolutionary government\'s land reforms — nationalizing the clove plantations and distributing them to small farmers — attempted to undo the plantation economy, though with mixed results.',testimony:'The revolution was ours. What came after — that belonged to everyone\'s choices. Some good, some not.'},
+      3:{data:['Coral reef bleaching: 90% loss of shallow reefs (2016–2024)','Sea-level rise: projection +0.5–1.0m by 2100','Seaweed farming replacing fishing as women\'s income source','Tourism monoculture replacing ecological diversity','Swahili coastal knowledge systems at risk'],history:'Zanzibar today faces an ecological crisis that mirrors its historical extraction economy: the coral reefs that anchored the fishing economy are bleaching at catastrophic rates, the mangroves that protect the coast are being cleared for hotels, and the Swahili ecological knowledge embedded in traditional fishing practices is being eroded as younger generations move into tourism. The Indian Ocean climate system — with its monsoon cycles on which Swahili civilization was built — is being disrupted by the same global emissions that are bleaching the reefs.',testimony:'We plant coral now the way they once planted clove. For a future we may not see. But we plant it.'},
+      4:{data:['Seaweed farming economy scaling; 90% women farmers','Community-based marine reserves expanding','Swahili language and ecological knowledge documentation','East African coastal resilience coalition'],history:'Zanzibar\'s future is being shaped by the seaweed farming movement — one of the most successful climate adaptation stories in the Indian Ocean. Women who lost income as reef fishing declined have built a seaweed economy worth millions of dollars annually, demonstrating that adaptation can be driven by community knowledge rather than external intervention. The challenge is to scale this without creating the same monoculture dependencies that the clove economy created.',testimony:'We plant coral for ourselves. The reef belongs to everyone who lives by it. We will not let it go.'}
+    }
+  }
+];
+
+// ============================================================
+// ERA DATA — chronicle context for each time period
+// ============================================================
+const ERAS = [
+  {
+    label:'pre-1600',
+    title:'Before the plantation',
+    subtitle:'Indigenous ecologies, trade networks, and the world that colonialism erased',
+    eraTags:'ecology,demography,economy,violence',
+    ecology:{
+      label:'Ecology',
+      text:'Atlantic and Indian Ocean coastal zones held some of the most biodiverse ecosystems on earth — Atlantic Forest, tropical dry forest, Caribbean coral reefs, Gulf of Guinea mangrove complexes, and East African seagrass beds. These were actively managed by Indigenous and Bantu-speaking coastal peoples through fire, rotation, and selective harvest. The concept of "pristine wilderness" misrepresents these as untouched; they were human-tended landscapes.',
+      stats:[
+        {k:'Atlantic Forest original extent',v:'~1.5 million km²'},
+        {k:'Caribbean reef cover (est. baseline)',v:'>50% shallow zones'},
+        {k:'Mississippi bottomland hardwood',v:'~24 million acres'},
+        {k:'West African mangrove systems',v:'Largely intact'}
+      ]
+    },
+    demography:{
+      label:'Peoples & displacement',
+      text:'The Caribbean alone held between 3–8 million Indigenous people at contact — Taíno, Kalinago, and others. West Africa\'s coastal populations were organized into sophisticated trading states with urbanization rates comparable to contemporary Europe. The plantation economy that followed would render entire peoples extinct or push them into the mountains and forests.',
+      stats:[
+        {k:'Taíno population at contact (est.)',v:'3–8 million'},
+        {k:'Jolof Empire territory',v:'~300,000 km²'},
+        {k:'Swahili coast city network',v:'30+ trading cities'},
+        {k:'Mississippi Valley urban centers',v:'Cahokia: 10–20,000 people'}
+      ]
+    },
+    economy:{
+      label:'Economy & land',
+      text:'Pre-colonial economies were characterized by diverse, multi-crop systems — milpa agriculture, provision grounds, mangrove fisheries, and forest management — that sustained large populations without the extractive monoculture that would follow. Long-distance trade in gold, cloth, and spices connected West Africa, the Indian Ocean, and the Americas.',
+      stats:[
+        {k:'Ghanaian gold trade (Ghana Empire peak)',v:'Trans-Saharan monopoly'},
+        {k:'Swahili coast spice exports',v:'Indian Ocean network'},
+        {k:'Maya Mesoamerica maize yields',v:'Sustained 8–10 million people'},
+        {k:'Great Dismal Swamp rice cultivation',v:'Indigenous tidal rice systems'}
+      ]
+    },
+    violence:{
+      label:'Violence & rupture',
+      text:'The violence of this period is the violence of first contact: Spanish and Portuguese slaving raids beginning in the 1440s on the West African coast; the Columbian epidemics that killed 50–90% of Indigenous Caribbean populations within decades of contact; and the early encomienda system that reduced surviving Taíno to forced labor. The plantation had not yet been built, but its foundations were being laid.',
+      stats:[
+        {k:'Taíno population collapse (Hispaniola), 1492–1550',v:'~300,000 → < 500'},
+        {k:'First Portuguese slaving raid (West Africa)',v:'1441'},
+        {k:'Spanish Requerimiento (demand of submission)',v:'1513'},
+        {k:'Encomienda system established',v:'1503'}
+      ]
+    },
+    quote:'The world before the plantation was not an absence of civilization. It was a different one — and its destruction was not accidental.',
+    quoteSource:'Paraphrase of C.L.R. James · The Black Jacobins, 1938'
+  },
+  {
+    label:'1600–1865',
+    title:'The plantation regime',
+    subtitle:'Clearing, draining, diking — the substrate of today\'s risk is laid',
+    ecology:{
+      label:'Ecological transformation',
+      text:'The plantation economy required the systematic destruction of existing ecosystems and their replacement with monocultures — sugar, cotton, indigo, tobacco, rice. Forests were cleared, marshes drained, rivers straightened and leveed. The tidal marsh management practiced by Gullah Geechee rice growers on the South Carolina coast was an African technology imposed on a landscape being simultaneously industrialized.',
+      stats:[
+        {k:'Barbados forest cover by 1700',v:'< 2% (total deforestation)'},
+        {k:'Louisiana cypress swamp cleared for sugar',v:'~6 million acres'},
+        {k:'South Carolina rice coast marsh drainage',v:'250,000+ acres'},
+        {k:'Atlantic Forest loss by 1800 (estimated)',v:'~15% of original'}
+      ]
+    },
+    demography:{
+      label:'Peoples & displacement',
+      text:'The Atlantic slave trade forcibly transported 12.5 million enslaved Africans to the Americas between 1500 and 1867 — approximately 2 million died in transit. Specific ethnic and regional origins were deliberately disrupted to prevent organization and resistance, but Wolof, Mandinka, Kongo, Yoruba, Igbo, Akan, and Fon cultural practices survived and were transformed into Gullah, Creole, Candomblé, Vodou, and other syncretic traditions.',
+      stats:[
+        {k:'Enslaved Africans transported, 1600–1865',v:'~10 million'},
+        {k:'Mortality in Middle Passage (est.)',v:'10–15% per voyage'},
+        {k:'Brazil\'s enslaved population (1800)',v:'~1.2 million'},
+        {k:'St. Helena Island: enslaved:free ratio (1860)',v:'5:1'}
+      ]
+    },
+    economy:{
+      label:'Economy & extraction',
+      text:'Sugar became the most valuable commodity in world trade for much of this period — more valuable than all other colonial goods combined. The profits from enslaved labor funded Britain\'s Industrial Revolution, France\'s financial system, and Dutch maritime supremacy. Eric Williams\' thesis — that the slave trade and slavery financed capitalism — has been substantially verified by subsequent economic historians.',
+      stats:[
+        {k:'British slave trade profits, 1761–1808',v:'~£12 million (modern: billions)'},
+        {k:'Sugar\'s share of European trade, 1700s',v:'~60% of tropical imports'},
+        {k:'Louisiana sugar output, 1850',v:'250 million lbs/year'},
+        {k:'Enslaved people as % of US wealth (1860)',v:'~20% of total national wealth'}
+      ]
+    },
+    violence:{
+      label:'Violence & resistance',
+      text:'The plantation regime produced some of the most sustained collective resistance in human history: the Haitian Revolution (1791–1804), the Jamaican Maroon Wars, Nat Turner\'s rebellion, the Stono Rebellion, and hundreds of smaller acts of resistance that never made the historical record. The legal codes designed to manage enslaved people — the Barbados Slave Code of 1661, the Code Noir of 1685 — systematized brutality as governance.',
+      stats:[
+        {k:'Haitian Revolution: free republic declared',v:'1804'},
+        {k:'Jamaican Maroon Treaty (First War)',v:'1739'},
+        {k:'Documented slave rebellions in US (est.)',v:'250+'},
+        {k:'Palmares quilombo: population at peak',v:'~30,000'}
+      ]
+    },
+    quote:'They sold us in exchange for sugar. They bought the whole world with what they took from us. We built it all.',
+    quoteSource:'Composite of voices from the archive · Atlantic passage'
+  },
+  {
+    label:'1865–1970',
+    title:'Emancipation and extraction',
+    subtitle:'The long machinery of industrial extraction replaces the plantation — but keeps its geography',
+    ecology:{
+      label:'Ecological intensification',
+      text:'Industrial extraction — oil, bauxite, petrochemicals, large-scale monoculture — continued the ecological transformation the plantation began, but at industrial scale and speed. The Louisiana petrochemical corridor was sited precisely on the plantation belt. Jamaican bauxite mining cleared interior forest. The Volta River Dam in Ghana displaced 80,000 people and submerged ecosystems for a dam primarily serving a US aluminum corporation.',
+      stats:[
+        {k:'Standard Oil Baton Rouge refinery established',v:'1909'},
+        {k:'Louisiana coastal land loss begins accelerating',v:'1930s'},
+        {k:'Ghana Volta Dam displacement',v:'80,000 people (1966)'},
+        {k:'Jamaica bauxite mining begins',v:'1952'}
+      ]
+    },
+    demography:{
+      label:'Peoples & migration',
+      text:'Emancipation did not produce land reform. The Great Migration (1910–1940) and Second Great Migration (1940–1970) moved 6 million Black Americans from the South — where the plantation had been — to Northern cities, propelled by both economic pressure and racial terror. Caribbean independence movements (Haiti 1804, Cuba 1898, Trinidad 1962, Jamaica 1962, Barbados 1966, Belize 1981) restructured the legal but not the material relationship to the plantation economy.',
+      stats:[
+        {k:'Great Migration: Black Americans North, 1910–40',v:'~1.6 million'},
+        {k:'Second Great Migration, 1940–70',v:'~5 million'},
+        {k:'Caribbean independence nations, 1960–70',v:'12 nations'},
+        {k:'Gullah Geechee land loss, 1870–1970',v:'>90% of original freedpeople holdings'}
+      ]
+    },
+    economy:{
+      label:'Economy & dispossession',
+      text:'IMF structural adjustment programs from the 1980s — imposed as conditions for debt relief across the Caribbean, Africa, and Latin America — dismantled the post-independence development projects that had attempted to redirect colonial economies. Education, health, and agriculture budgets were cut to service debts often incurred by colonial regimes. The Washington Consensus effectively reversed the economic sovereignty that political independence had begun to build.',
+      stats:[
+        {k:'Jamaica IMF structural adjustment begins',v:'1977'},
+        {k:'Caribbean sugar preference ends (EU)',v:'2009'},
+        {k:'Louisiana Chemical Corridor facilities by 1970',v:'~50 plants'},
+        {k:'Barbados transition to tourism begins',v:'1950s–1960s'}
+      ]
+    },
+    violence:{
+      label:'Violence & civil rights',
+      text:'Jim Crow, the Haitian occupation by US forces (1915–1934), the CIA\'s overthrow of Nkrumah (1966) and Manley\'s Jamaica — the formal legal end of slavery and colonialism was accompanied by new forms of state-sanctioned violence designed to maintain the material relationships that slavery and colonialism had established. Environmental racism — the siting of toxic facilities in Black and Indigenous communities — became a documented pattern in this period.',
+      stats:[
+        {k:'US occupation of Haiti',v:'1915–1934'},
+        {k:'Nkrumah coup (CIA-backed)',v:'February 1966'},
+        {k:'Civil Rights Act (US)',v:'1964'},
+        {k:'South Africa apartheid formally ends',v:'1994'}
+      ]
+    },
+    quote:'They gave us independence and kept the structure. We got the flag. They kept the land and the debts.',
+    quoteSource:'Composite of voices · Caribbean post-independence'
+  },
+  {
+    label:'1970–2026',
+    title:'The inherited present',
+    subtitle:'Climate vulnerability as the materialization of 400 years of extraction',
+    ecology:{
+      label:'Ecological crisis',
+      text:'The ecological damage accumulated over four centuries of plantation agriculture and industrial extraction is now materializing as climate crisis. Caribbean coral reefs have lost 50–80% of their cover since 1970. Louisiana loses a football field of coastal land every 100 minutes. Atlantic Forest cover is at 12% of its original extent. The communities most exposed to these losses are those who were also most harmed by the extraction that caused them — a pattern researchers now call "compounding vulnerability."',
+      stats:[
+        {k:'Caribbean coral cover loss since 1970',v:'50–80%'},
+        {k:'Louisiana coastal land loss rate',v:'1 football field / 100 minutes'},
+        {k:'Atlantic Forest remaining (2024)',v:'~12% of original'},
+        {k:'Zanzibar shallow reef bleaching (2016–24)',v:'~90% loss'}
+      ]
+    },
+    demography:{
+      label:'Displacement now',
+      text:'Climate migration is already underway — not as a future scenario but as a present fact. In Louisiana, entire communities are accepting federal relocation funds. On the Gullah Geechee coast, rising flood insurance is displacing families whose ancestors survived slavery. In Senegal, young people cross the Atlantic in small boats in patterns that echo the forced crossings of the slave trade, driven by the combination of Sahel desertification and economic collapse.',
+      stats:[
+        {k:'Isle de Jean Charles relocation (Louisiana)',v:'2016: first federal climate relocation'},
+        {k:'Cancer Alley cancer risk vs. national average',v:'Up to 50x in some tracts'},
+        {k:'Gullah Geechee coastal property at flood risk',v:'24 heritage sites'},
+        {k:'EJSCREEN composite: St. Helena Island',v:'88th percentile'}
+      ]
+    },
+    economy:{
+      label:'Economy & reparations',
+      text:'The reparations movement has moved from moral argument to economic calculation. Barbados, Jamaica, and other Caribbean nations have commissioned formal studies of the wealth transferred from their economies during slavery and colonialism. The Caribbean Community\'s (CARICOM) Reparations Commission calculates that the damages include not only the labor value of enslaved people but the ecological destruction — deforestation, soil exhaustion, freshwater loss — that they were forced to produce.',
+      stats:[
+        {k:'CARICOM Reparations Commission formal demand',v:'2014'},
+        {k:'Caribbean reparations calculation (CARICOM)',v:'In progress; trillions estimated'},
+        {k:'Bridgetown Initiative (Barbados climate finance)',v:'2022'},
+        {k:'Loss & Damage fund agreed (COP27)',v:'2022'}
+      ]
+    },
+    violence:{
+      label:'Environmental violence now',
+      text:'The legal and organizing strategies developed by Cancer Alley communities, the Gullah Geechee Corridor, quilombola land rights activists, and Garifuna land rights lawyers represent a new phase in the long history of resistance to extraction. The concept of "slow violence" — Rob Nixon\'s term for harm that accumulates over decades rather than erupting in a single event — describes the pattern these communities have been naming since before it had an academic label.',
+      stats:[
+        {k:'RISE St. James Formosa permit revocation',v:'2022'},
+        {k:'St. Helena Island sea-level rise projection (2100)',v:'+1.5–2.5 ft'},
+        {k:'Quilombo communities awaiting land title',v:'1,500+ (Brazil, 2024)'},
+        {k:'Gorée Island storm surge frequency increase',v:'3x since 1990'}
+      ]
+    },
+    quote:'We did not inherit this crisis. We were assigned to it. The question now is who will resource the response.',
+    quoteSource:'Mia Mottley, Prime Minister of Barbados · COP26, Glasgow, 2021'
+  },
+  {
+    label:'2026 →',
+    title:'The horizon',
+    subtitle:'The future these communities are choosing — drawn onto the same ground',
+    ecology:{
+      label:'Ecological futures',
+      text:'The communities in this atlas are not waiting for global agreements to begin ecological restoration. Seaweed farming in Zanzibar is rebuilding coastal economies as reefs die. Atlantic Forest restoration coalitions in Bahia are replanting on cleared land. Community-based marine reserves in Belize are attempting to protect what remains of the Mesoamerican Barrier Reef. These are not compensatory gestures — they are acts of ecological sovereignty.',
+      stats:[
+        {k:'Zanzibar seaweed farming value',v:'~$15 million/year; 90% women farmers'},
+        {k:'Atlantic Forest restoration target',v:'12 million hectares by 2030'},
+        {k:'Belize community marine reserves',v:'Expanding under Blue Bond mechanism'},
+        {k:'Louisiana mangrove restoration funded',v:'Ongoing; $50+ million committed'}
+      ]
+    },
+    demography:{
+      label:'Communities choosing futures',
+      text:'The question of managed retreat versus community continuity is the central tension of climate adaptation for communities with deep historical attachment to specific places. Isle de Jean Charles (Louisiana) accepted federal relocation in 2016, becoming the first US "climate refugees." Most communities in this atlas are refusing this framing — asserting the right to adapt in place, to rebuild, and to be resourced to do so rather than displaced again.',
+      stats:[
+        {k:'Isle de Jean Charles relocation accepted',v:'2016'},
+        {k:'Gullah Geechee land trust movement',v:'Expanding; multiple sites'},
+        {k:'RISE St. James: Cancer Alley wins',v:'2022–23: multiple permits blocked'},
+        {k:'Garifuna land rights victories (Belize)',v:'Ongoing legal campaign'}
+      ]
+    },
+    economy:{
+      label:'Economy & sovereignty',
+      text:'The Bridgetown Initiative — Barbados PM Mia Mottley\'s proposal to reform the international financial architecture to provide debt relief and climate finance to vulnerable nations — is the most significant economic intervention emerging from the communities in this atlas. It argues that the institutions of international finance (IMF, World Bank, MDBs) were built to service the same global economy that created the climate crisis, and must be restructured to resource adaptation and reparation.',
+      stats:[
+        {k:'Bridgetown Initiative proposed',v:'2022 (updated 2023)'},
+        {k:'Loss & Damage fund (COP27)',v:'$700M pledged (2022); implementation ongoing'},
+        {k:'CARICOM reparations process',v:'Formal negotiations in progress'},
+        {k:'Quilombo titling acceleration (Lula govt)',v:'2023–'}
+      ]
+    },
+    violence:{
+      label:'Naming the continuity',
+      text:'The intellectual and political project connecting these communities — the argument that climate vulnerability is not random but is the materialization of specific historical violences — is being advanced by scholars at Duke, UWI, USP, and in the communities themselves. The atlas is one artifact of that project: an attempt to make visible what GIS data alone cannot show, and what testimony alone cannot prove, by holding all three registers together.',
+      stats:[
+        {k:'CCDGB (Duke) founding',v:'M. Crichlow / collaborative'},
+        {k:'Gullah Geechee Cultural Heritage Corridor',v:'Federal designation 2006'},
+        {k:'SALISES research mandate',v:'Caribbean development & sovereignty'},
+        {k:'Atlantic slavery reparations: nations filing claims',v:'14 CARICOM nations (2023)'}
+      ]
+    },
+    quote:'We are not at the end of a history. We are at the beginning of the argument about what comes next. That argument belongs to us.',
+    quoteSource:'Cherryia White · Working notes, 2024'
+  }
+];
+
+// ============================================================
+// GEO-NODES — real lat/lon for each site
+// ============================================================
+const GEO_NODES = [
+  { id:'sthelena',   lon: -80.58, lat:  32.37, kind:'anchor',  name:'St. Helena Island'    },
+  { id:'louisiana',  lon: -91.10, lat:  30.25, kind:'anchor',  name:'Cancer Alley, LA'     },
+  { id:'barbados',   lon: -59.54, lat:  13.19, kind:'anchor',  name:'Barbados'             },
+  { id:'jamaica',    lon: -77.30, lat:  18.11, kind:'horizon', name:'Jamaica'              },
+  { id:'bahia',      lon: -38.51, lat: -12.97, kind:'horizon', name:'Bahia, Brazil'        },
+  { id:'belize',     lon: -88.49, lat:  17.19, kind:'horizon', name:'Belize'               },
+  { id:'ghana',      lon:  -1.25, lat:   5.10, kind:'horizon', name:'Ghana · Cape Coast'   },
+  { id:'senegal',    lon: -17.40, lat:  14.67, kind:'horizon', name:'Gorée Island'         },
+  { id:'zanzibar',   lon:  39.20, lat:  -6.16, kind:'horizon', name:'Zanzibar'             },
+];
+
+// ============================================================
+// D3 GEOGRAPHIC MAP
+// ============================================================
+let projection, pathGen, svgMap, nodesG_geo;
+
+function initMap(world) {
+  const wrap = document.getElementById('mapwrap');
+  const W = wrap.clientWidth || 700;
+  const H = Math.max(420, wrap.clientHeight || 460);
+
+  svgMap = d3.select('#geomap')
+    .attr('viewBox', `0 0 ${W} ${H}`)
+    .attr('preserveAspectRatio', 'xMidYMid meet');
+
+  // Custom Atlantic-centered projection: show Americas on left, Africa/Europe on right
+  projection = d3.geoNaturalEarth1()
+    .rotate([20, 0])           // rotate so Atlantic is centered
+    .scale(W * 0.175)
+    .translate([W / 2, H / 2]);
+
+  pathGen = d3.geoPath().projection(projection);
+
+  // Ocean background
+  svgMap.append('rect').attr('width', W).attr('height', H).attr('fill', '#0d1e2e');
+
+  // Graticule (grid lines)
+  const graticule = d3.geoGraticule().step([20, 20])();
+  svgMap.append('path')
+    .datum(graticule)
+    .attr('d', pathGen)
+    .attr('fill', 'none')
+    .attr('stroke', '#36807A')
+    .attr('stroke-opacity', 0.12)
+    .attr('stroke-width', 0.6);
+
+  // Countries
+  const countries = topojson.feature(world, world.objects.countries);
+  const land = topojson.merge(world, world.objects.countries.geometries);
+
+  // Land fill
+  svgMap.append('path')
+    .datum(land)
+    .attr('d', pathGen)
+    .attr('fill', '#1E3A57')
+    .attr('stroke', 'none');
+
+  // Country borders
+  svgMap.append('path')
+    .datum(topojson.mesh(world, world.objects.countries, (a,b) => a !== b))
+    .attr('d', pathGen)
+    .attr('fill', 'none')
+    .attr('stroke', '#2a4f6e')
+    .attr('stroke-width', 0.4)
+    .attr('stroke-opacity', 0.7);
+
+  // Coastline emphasis
+  svgMap.append('path')
+    .datum(land)
+    .attr('d', pathGen)
+    .attr('fill', 'none')
+    .attr('stroke', '#3a6080')
+    .attr('stroke-width', 0.8)
+    .attr('stroke-opacity', 0.9);
+
+  // ---- LAYER GROUPS (geo-positioned) ----
+  // Flood risk halos (around anchor coastal sites)
+  const floodLayer = svgMap.append('g').attr('class','layer-group geo-layer').attr('data-group','flood');
+  const floodSites = GEO_NODES.filter(n => ['sthelena','louisiana','barbados','zanzibar','senegal'].includes(n.id));
+  floodSites.forEach(n => {
+    const [px, py] = projection([n.lon, n.lat]);
+    floodLayer.append('circle')
+      .attr('cx', px).attr('cy', py).attr('r', 18)
+      .attr('fill', '#3f6f96').attr('fill-opacity', 0.28)
+      .attr('stroke', '#3f6f96').attr('stroke-opacity', 0.5)
+      .attr('stroke-width', 1).attr('stroke-dasharray','3 3');
+  });
+
+  // Historical plantation belt (semi-transparent ochre halos)
+  const histLayer = svgMap.append('g').attr('class','layer-group geo-layer').attr('data-group','hist');
+  const histSites = GEO_NODES.filter(n => ['sthelena','louisiana','barbados','jamaica','bahia'].includes(n.id));
+  histSites.forEach(n => {
+    const [px, py] = projection([n.lon, n.lat]);
+    histLayer.append('circle')
+      .attr('cx', px).attr('cy', py).attr('r', 22)
+      .attr('fill', '#BE7B3A').attr('fill-opacity', 0.18)
+      .attr('stroke', '#BE7B3A').attr('stroke-opacity', 0.4)
+      .attr('stroke-width', 1);
+  });
+
+  // Toxicity corridors
+  const toxLayer = svgMap.append('g').attr('class','layer-group geo-layer off').attr('data-group','tox');
+  const [lpx, lpy] = projection([-91.10, 30.25]);
+  // Cancer Alley corridor line segments
+  [[-90.5,30.1],[-91.5,30.4],[-90.8,29.9],[-91.2,30.6]].forEach(([lo,la]) => {
+    const [ex,ey] = projection([lo,la]);
+    toxLayer.append('line')
+      .attr('x1',lpx).attr('y1',lpy).attr('x2',ex).attr('y2',ey)
+      .attr('stroke','#7C3327').attr('stroke-width',2.5)
+      .attr('stroke-opacity',0.7).attr('stroke-linecap','round');
+    toxLayer.append('circle').attr('cx',ex).attr('cy',ey).attr('r',3)
+      .attr('fill','#7C3327').attr('fill-opacity',0.8);
+  });
+
+  // Race & income overlay
+  const demoLayer = svgMap.append('g').attr('class','layer-group geo-layer off').attr('data-group','demo');
+  GEO_NODES.forEach(n => {
+    const [px, py] = projection([n.lon, n.lat]);
+    demoLayer.append('circle')
+      .attr('cx', px).attr('cy', py).attr('r', 26)
+      .attr('fill', '#5b6b7a').attr('fill-opacity', 0.22);
+  });
+
+  // ---- PASSAGE ROUTES (great circle arcs) ----
+  const routeLayer = svgMap.append('g').attr('class','route-layer');
+  const routes = [
+    // Middle Passage routes
+    { from: [-17.40, 14.67], to: [-59.54, 13.19] },  // Gorée → Barbados
+    { from: [ -1.25,  5.10], to: [-77.30, 18.11] },  // Ghana → Jamaica
+    { from: [-17.40, 14.67], to: [-80.58, 32.37] },  // Gorée → SC
+    { from: [ -1.25,  5.10], to: [-38.51,-12.97] },  // Ghana → Bahia
+    { from: [ 39.20, -6.16], to: [-59.54, 13.19] },  // Zanzibar arc (Indian Ocean)
+  ];
+  routes.forEach(r => {
+    routeLayer.append('path')
+      .datum({ type:'LineString', coordinates:[r.from, r.to] })
+      .attr('d', pathGen)
+      .attr('fill','none')
+      .attr('stroke','#BE7B3A')
+      .attr('stroke-width', 1.2)
+      .attr('stroke-opacity', 0.45)
+      .attr('stroke-dasharray','3 7');
+  });
+
+  // ---- STORY NODES ----
+  nodesG_geo = svgMap.append('g').attr('id','nodes-geo');
+
+  GEO_NODES.forEach(n => {
+    const nodeData = NODES.find(nd => nd.id === n.id);
+    if (!nodeData) return;
+    const [px, py] = projection([n.lon, n.lat]);
+    const fill = n.kind === 'anchor' ? '#36807A' : '#BE7B3A';
+    const r = n.kind === 'anchor' ? 7 : 5.5;
+
+    const g = nodesG_geo.append('g')
+      .attr('class','node')
+      .attr('tabindex','0')
+      .attr('role','button')
+      .attr('aria-label', n.name + ' — open story node')
+      .style('cursor','pointer');
+
+    // Pulse ring
+    g.append('circle')
+      .attr('class','halo')
+      .attr('cx', px).attr('cy', py)
+      .attr('r', r + 7)
+      .attr('fill','none')
+      .attr('stroke','#86c5bd')
+      .attr('stroke-width', 1.5)
+      .attr('opacity', 0);
+
+    // Hit area
+    g.append('circle')
+      .attr('cx', px).attr('cy', py)
+      .attr('r', 14)
+      .attr('fill','transparent');
+
+    // Main dot
+    g.append('circle')
+      .attr('class','dot')
+      .attr('cx', px).attr('cy', py)
+      .attr('r', r)
+      .attr('fill', fill)
+      .attr('stroke','#fff')
+      .attr('stroke-width', 1.3);
+
+    // Label — smart positioning to avoid overlap
+    const labelOffset = getLabelOffset(n.id);
+    g.append('text')
+      .attr('x', px + labelOffset.x)
+      .attr('y', py + labelOffset.y)
+      .attr('font-family','Space Grotesk,sans-serif')
+      .attr('font-size','9.5')
+      .attr('fill','#efe8da')
+      .attr('text-anchor', labelOffset.anchor || 'start')
+      .text(n.name);
+
+    g.on('click', () => openPanel(nodeData));
+    g.on('keydown', (e) => { if (e.key==='Enter'||e.key===' '){e.preventDefault();openPanel(nodeData);} });
+    g.on('mouseenter', function() { d3.select(this).select('.halo').attr('opacity',1); });
+    g.on('mouseleave', function() { d3.select(this).select('.halo').attr('opacity',0); });
+  });
+
+  // Label key regions on the map
+  const labels = [
+    { name:'NORTH AMERICA', lon:-100, lat: 50 },
+    { name:'SOUTH AMERICA', lon: -60, lat:-15 },
+    { name:'AFRICA',        lon:  20, lat: 10 },
+    { name:'EUROPE',        lon:  15, lat: 55 },
+    { name:'CARIBBEAN',     lon: -68, lat: 20 },
+    { name:'ATLANTIC OCEAN',lon: -30, lat:  5 },
+    { name:'INDIAN OCEAN',  lon:  65, lat:-20 },
+  ];
+  const labelsG = svgMap.append('g').attr('class','geo-labels');
+  labels.forEach(l => {
+    const [px, py] = projection([l.lon, l.lat]);
+    if (!px || !py) return;
+    labelsG.append('text')
+      .attr('x', px).attr('y', py)
+      .attr('font-family','Space Grotesk,sans-serif')
+      .attr('font-size', l.name.includes('OCEAN') ? '8.5' : '8')
+      .attr('fill','rgba(134,197,189,0.45)')
+      .attr('text-anchor','middle')
+      .attr('letter-spacing','0.14em')
+      .text(l.name);
+  });
+
+  document.getElementById('map-loading').style.display = 'none';
+  rebuildLayerGroupRefs();
+
+  // ---- ZOOM ----
+  const zoomGroup = svgMap.append('g').attr('id','zoom-root');
+  // Move all previously appended children into zoomGroup
+  svgMap.selectAll(':scope > *:not(#zoom-root)').each(function(){ zoomGroup.node().appendChild(this); });
+
+  const zoom = d3.zoom()
+    .scaleExtent([0.6, 12])
+    .on('zoom', (event) => {
+      zoomGroup.attr('transform', event.transform);
+    });
+
+  svgMap.call(zoom);
+
+  // Prevent zoom from eating node clicks — use filter
+  zoom.filter(event => {
+    // allow wheel zoom, allow drag pan, but let clicks through
+    return event.type === 'wheel' || event.type === 'mousedown' || event.type === 'touchstart';
+  });
+
+  const zoomBy = (factor) => {
+    svgMap.transition().duration(300).call(zoom.scaleBy, factor);
+  };
+
+  document.getElementById('zoom-in').addEventListener('click',  () => zoomBy(1.6));
+  document.getElementById('zoom-out').addEventListener('click', () => zoomBy(0.625));
+  document.getElementById('zoom-reset').addEventListener('click', () => {
+    svgMap.transition().duration(400).call(zoom.transform, d3.zoomIdentity);
+  });
+}
+
+function getLabelOffset(id) {
+  const offsets = {
+    sthelena:  { x:  9, y: -9 },
+    louisiana: { x: -10, y:-10, anchor:'end' },
+    barbados:  { x:  9, y: -8 },
+    jamaica:   { x: -10, y: -8, anchor:'end' },
+    bahia:     { x:  9, y: -8 },
+    belize:    { x: -10, y:-10, anchor:'end' },
+    ghana:     { x:  9, y: -8 },
+    senegal:   { x: -10, y: -8, anchor:'end' },
+    zanzibar:  { x:  9, y: -8 },
+  };
+  return offsets[id] || { x: 9, y: -8 };
+}
+
+// Re-wire layer toggles to geo layer groups
+function rebuildLayerGroupRefs() {
+  document.querySelectorAll('.layer input').forEach(cb => {
+    cb.addEventListener('change', () => {
+      document.querySelectorAll(`[data-group="${cb.dataset.layer}"]`).forEach(g => {
+        g.classList.toggle('off', !cb.checked);
+      });
+    });
+  });
+}
+
+// Load world topojson and init map
+fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+  .then(r => r.json())
+  .then(world => initMap(world))
+  .catch(err => {
+    console.error('Map load failed:', err);
+    document.getElementById('map-loading').textContent = 'Map unavailable — check connection';
+    // Fallback: build nodes in static SVG
+    buildFallbackNodes();
+  });
+
+function buildFallbackNodes() {
+  const nodesG = document.getElementById('nodes');
+  if (!nodesG) return;
+  // minimal fallback dots
+  NODES.forEach((n,i) => {
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('class','node'); g.setAttribute('tabindex','0');
+    const fill = n.kind==='anchor'?'#36807A':'#BE7B3A';
+    g.innerHTML = `<circle cx="${n.x}" cy="${n.y}" r="7" fill="${fill}" stroke="#fff" stroke-width="1.3"/>`;
+    g.addEventListener('click', () => openPanel(n));
+    nodesG.appendChild(g);
+  });
+}
+
+// ============================================================
+// ERA CHRONICLE
+// ============================================================
+let currentEra = 3;
+const slider=document.getElementById('time');
+const eraEl=document.getElementById('era');
+
+function renderChronicle(i){
+  const e=ERAS[i];
+  document.getElementById('chera-tag').textContent=e.label;
+  document.getElementById('chtitle').textContent=e.title;
+  document.getElementById('chsub').textContent=e.subtitle;
+  eraEl.textContent=e.label;
+
+  const cols = ['ecology','demography','economy','violence'];
+  const grid = document.getElementById('chronicle-grid');
+  grid.innerHTML = cols.map(k=>{
+    const col = e[k];
+    const statsHtml = col.stats.map(s=>`<div class="stat-row"><span class="sk">${s.k}</span><span class="sv">${s.v}</span></div>`).join('');
+    return `<div class="chcol ${k}">
+      <div class="chlabel">${col.label}</div>
+      <p>${col.text}</p>
+      <div style="margin-top:12px;">${statsHtml}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('chronicle-quote').innerHTML=
+    `<blockquote>"${e.quote}"</blockquote><cite>— ${e.quoteSource}</cite>`;
+
+  renderChangePills(i);
+
+  // update layer opacities to match era
+  document.querySelectorAll('[data-group="hist"]').forEach(g=>{ if(!g.classList.contains('off')) g.style.opacity=(i<=1?1:0.3); });
+  document.querySelectorAll('[data-group="flood"]').forEach(g=>{ if(!g.classList.contains('off')) g.style.opacity=(i>=3?1:0.22); });
+  document.querySelectorAll('[data-group="tox"]').forEach(g=>{ if(!g.classList.contains('off')) g.style.opacity=(i===2||i===3?1:0.15); });
+}
+
+function renderChangePills(i){
+  const pillData = [
+    [
+      {t:'Ecosystems intact',c:'up'},{t:'Indigenous sovereignty',c:'up'},{t:'No plantation yet',c:'neutral'},{t:'First slaving raids begin',c:'down'}
+    ],
+    [
+      {t:'Total deforestation in some islands',c:'down'},{t:'12M+ enslaved people transported',c:'down'},{t:'Plantation monoculture dominant',c:'down'},{t:'Major resistance movements',c:'up'},{t:'African culture survives',c:'up'}
+    ],
+    [
+      {t:'Emancipation achieved',c:'up'},{t:'Land reform reversed',c:'down'},{t:'Industrial extraction begins',c:'down'},{t:'Petrochemical corridor formed',c:'down'},{t:'Pan-African movements rise',c:'up'}
+    ],
+    [
+      {t:'Coral reefs in collapse',c:'down'},{t:'Flood risk compounding',c:'down'},{t:'Legal wins in Cancer Alley',c:'up'},{t:'Reparations demanded',c:'up'},{t:'Climate displacement underway',c:'down'}
+    ],
+    [
+      {t:'Seaweed & restoration economy',c:'up'},{t:'Bridgetown Initiative',c:'up'},{t:'Community land trusts',c:'up'},{t:'Climate migration continues',c:'down'},{t:'Quilombo titling accelerating',c:'up'}
+    ]
+  ];
+  const list=document.getElementById('changes-list');
+  list.innerHTML=pillData[i].map(p=>`<span class="change-pill ${p.c}">${p.c==='down'?'↓':p.c==='up'?'↑':'→'} ${p.t}</span>`).join('');
+}
+
+slider.addEventListener('input',()=>{
+  currentEra=+slider.value;
+  renderChronicle(currentEra);
+});
+renderChronicle(currentEra);
+
+// ============================================================
+// DETAIL PANEL — era-aware, tabbed
+// ============================================================
+const panel=document.getElementById('panel');
+const scrim=document.getElementById('scrim');
+let lastFocus=null, activeNode=null, activeTab='data';
+
+document.querySelectorAll('.ptab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    activeTab=tab.dataset.tab;
+    document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    if(activeNode) renderPanelBody(activeNode, currentEra, activeTab);
+  });
+});
+
+function renderPanelBody(n, eraIdx, tab){
+  const ed = n.eras[eraIdx] || n.eras[3];
+  const pbody=document.getElementById('pbody');
+  const eraLabel=ERAS[eraIdx].label;
+
+  if(tab==='data'){
+    pbody.innerHTML=
+      `<div class="era-badge">${eraLabel}</div>`+
+      `<div class="reg data"><div class="rl">Data & indicators</div>`+
+      ed.data.map(d=>`<div class="stat-row"><span class="sk">${d.split(':')[0]||d}</span><span class="sv">${d.includes(':')?d.split(':').slice(1).join(':').trim():''}</span></div>`).join('')+
+      `</div>`+
+      `<p class="cite-note">Data in this prototype is illustrative, grounded in documented sources. Drag the time slider to see how indicators change across eras. For primary sources, see the companion bibliography in "Where the Map Begins."</p>`;
+  } else if(tab==='history'){
+    pbody.innerHTML=
+      `<div class="era-badge">${eraLabel}</div>`+
+      `<div class="reg history"><div class="rl">Historical context</div><p>${ed.history}</p></div>`+
+      `<p class="cite-note">Historical narrative grounded in: Saidiya Hartman, "Lose Your Mother" (2007); C.L.R. James, "The Black Jacobins" (1938); Sidney Mintz, "Sweetness and Power" (1985); Eric Williams, "Capitalism and Slavery" (1944); and primary source archives. See companion bibliography.</p>`;
+  } else {
+    pbody.innerHTML=
+      `<div class="era-badge">${eraLabel}</div>`+
+      `<div class="reg testimony"><div class="rl">The testimony</div>`+
+      `<blockquote>&#8220;${ed.testimony}&#8221;</blockquote>`+
+      `<div style="margin-top:10px;">`+
+      `<button class="play" type="button" aria-label="Play oral history (prototype)">&#9654; Play oral history · 4:12</button>`+
+      `<button class="dl-btn" type="button" onclick="downloadNode()" aria-label="Download this node\'s data">↓ Export node data</button>`+
+      `</div>`+
+      `<p class="cite-note">Testimony in this prototype is illustrative — composite voices drawn from oral history archives. In the published atlas, this field will link to specific recorded testimonies collected through the CCDGB oral history project at Duke University.</p></div>`;
+  }
+}
+
+function openPanel(n){
+  lastFocus=document.activeElement;
+  activeNode=n;
+  activeTab='data';
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+  document.querySelector('.ptab[data-tab="data"]').classList.add('active');
+  document.getElementById('pkind').textContent = n.kind==='anchor'?'Anchor site — deep research node':'Horizon site — wider field node';
+  document.getElementById('pname').textContent=n.name;
+  document.getElementById('pcoord').textContent=n.region+' · '+n.coord;
+  renderPanelBody(n, currentEra, activeTab);
+  panel.classList.add('open');
+  panel.setAttribute('aria-hidden','false');
+  scrim.classList.add('show');
+  document.getElementById('pclose').focus();
+}
+
+function closePanel(){
+  panel.classList.remove('open');
+  panel.setAttribute('aria-hidden','true');
+  scrim.classList.remove('show');
+  if(lastFocus) lastFocus.focus();
+}
+
+document.getElementById('pclose').addEventListener('click',closePanel);
+scrim.addEventListener('click',closePanel);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel.classList.contains('open'))closePanel();});
+
+// ============================================================
+// DOWNLOAD FUNCTIONS
+// ============================================================
+function downloadNode(){
+  if(!activeNode) return;
+  const n=activeNode;
+  const out={site:n.name,region:n.region,coordinates:n.coord,kind:n.kind,eraData:{}};
+  Object.keys(n.eras).forEach(k=>{out.eraData[ERAS[+k].label]=n.eras[k];});
+  const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=n.id+'_atlas_data.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function downloadAtlas(){
+  const out=NODES.map(n=>{
+    const site={site:n.name,region:n.region,coordinates:n.coord,kind:n.kind,eraData:{}};
+    Object.keys(n.eras).forEach(k=>{site.eraData[ERAS[+k].label]=n.eras[k];});
+    return site;
+  });
+  const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='mapping_the_break_atlas_data.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
