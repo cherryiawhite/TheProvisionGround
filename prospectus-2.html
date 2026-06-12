@@ -1,0 +1,1383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Provision Ground · A Research Prospectus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..500&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#11212E; --indigo:#1E3A57; --tide:#36807A; --tide-deep:#225e59;
+  --ochre:#BE7B3A; --oxblood:#7C3327; --paper:#F5EFE3; --paper2:#ECE2D0;
+  --paper3:#E4D8C2; --line:rgba(17,33,46,.16); --line-strong:rgba(17,33,46,.34); --muted:#5a5043;
+}
+*{box-sizing:border-box;}
+@page{ size:Letter; margin:0; }
+html,body{margin:0;padding:0;background:#cfc8b8;}
+body{font-family:'Spectral',Georgia,serif;color:var(--ink);font-size:10.6pt;line-height:1.52;-webkit-font-smoothing:antialiased;}
+.sheet{position:relative;width:8.5in;height:11in;margin:0 auto;background:var(--paper);
+  padding:0.92in 0.95in 0.85in 0.95in;overflow:hidden;page-break-after:always;display:flex;flex-direction:column;}
+.sheet:last-child{page-break-after:auto;}
+
+h1,h2,h3,h4{font-family:'Fraunces',Georgia,serif;font-weight:600;font-variation-settings:'opsz' 80,'SOFT' 0,'WONK' 0;color:var(--ink);margin:0;}
+.eyebrow{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:8.2pt;letter-spacing:.22em;text-transform:uppercase;color:var(--tide-deep);}
+.eyebrow.ochre{color:var(--ochre);}
+.label{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:7.6pt;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+p{margin:0 0 8pt 0;}
+em,i{font-style:italic;}
+strong{font-weight:600;}
+a{color:var(--tide-deep);text-decoration:none;}
+.small{font-size:9pt;}
+.tiny{font-size:8pt;line-height:1.42;}
+
+.runhead{position:absolute;top:0.46in;left:0.95in;right:0.95in;display:flex;justify-content:space-between;align-items:center;
+  font-family:'Space Grotesk',sans-serif;font-size:7.2pt;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+.runfoot{position:absolute;bottom:0.46in;left:0.95in;right:0.95in;display:flex;justify-content:space-between;align-items:center;
+  font-family:'Space Grotesk',sans-serif;font-size:7.2pt;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.runfoot .pg{font-weight:600;color:var(--ink);}
+
+.tideline{width:100%;height:10px;margin:0;display:block;}
+.rule{height:1px;background:var(--line);border:0;margin:10pt 0;}
+.rule.dark{background:var(--line-strong);}
+
+.part-tag{display:flex;align-items:baseline;gap:12px;margin-bottom:2pt;}
+.part-num{font-family:'Fraunces',serif;font-variation-settings:'opsz' 144,'WONK' 1;font-weight:600;font-size:30pt;color:var(--tide);line-height:.8;}
+h2.section{font-size:21pt;line-height:1.05;letter-spacing:-.01em;margin:2pt 0 4pt;}
+h3{font-size:13.5pt;line-height:1.14;margin:12pt 0 4pt;color:var(--indigo);}
+h4{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9pt;letter-spacing:.05em;color:var(--ink);margin:9pt 0 3pt;text-transform:none;}
+.lead{font-size:11.6pt;line-height:1.5;color:#2a3742;}
+
+.pull{font-family:'Fraunces',serif;font-style:italic;font-variation-settings:'opsz' 110,'SOFT' 60;font-weight:500;
+  font-size:14pt;line-height:1.36;color:var(--indigo);border-left:2.5px solid var(--tide);padding:2pt 0 2pt 16pt;margin:12pt 0;}
+.pull .by{display:block;font-family:'Space Grotesk',sans-serif;font-style:normal;font-size:8pt;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:7pt;}
+
+.cols{column-count:2;column-gap:22px;}
+.cols p{margin-bottom:7pt;}
+.cols3{column-count:3;column-gap:18px;}
+
+.card{background:var(--paper2);border:1px solid var(--line);border-radius:3px;padding:11pt 13pt;}
+.card.tide{border-left:3px solid var(--tide);}
+.card.ochre{border-left:3px solid var(--ochre);}
+.card.ink{background:var(--ink);color:#e9e2d4;border:0;}
+.card.ink h4,.card.ink h3{color:#fff;}
+.card.ink .eyebrow{color:#86c5bd;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
+ul.clean{margin:4pt 0 8pt 0;padding-left:0;list-style:none;}
+ul.clean li{position:relative;padding-left:15px;margin-bottom:4pt;}
+ul.clean li:before{content:"";position:absolute;left:0;top:7px;width:5px;height:5px;background:var(--tide);border-radius:1px;transform:rotate(45deg);}
+ol.steps{margin:4pt 0;padding-left:16px;}
+ol.steps li{margin-bottom:5pt;}
+
+table.matrix{width:100%;border-collapse:collapse;font-size:8.8pt;}
+table.matrix th{font-family:'Space Grotesk',sans-serif;font-size:7.4pt;letter-spacing:.08em;text-transform:uppercase;text-align:left;color:var(--muted);border-bottom:1.5px solid var(--line-strong);padding:5pt 6pt;vertical-align:bottom;}
+table.matrix td{border-bottom:1px solid var(--line);padding:6pt 6pt;vertical-align:top;}
+table.matrix tr:last-child td{border-bottom:0;}
+.chip{display:inline-block;font-family:'Space Grotesk',sans-serif;font-size:6.8pt;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:9px;font-weight:600;}
+.chip.h{background:#d9e7e3;color:var(--tide-deep);}
+.chip.m{background:#efe1c8;color:#8a5a1e;}
+.chip.flag{background:#eccfc8;color:var(--oxblood);}
+
+.kicker-num{font-family:'Fraunces',serif;font-variation-settings:'opsz' 144;color:var(--ochre);font-size:13pt;font-weight:600;}
+.prov-num{font-family:'Fraunces',serif;font-variation-settings:'opsz' 144,'WONK' 1;font-weight:600;font-size:26pt;color:var(--tide);line-height:.8;}
+
+.cover{justify-content:space-between;padding:0;}
+.cover .frame{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:0.95in 0.9in 0.8in;}
+.cover .meta{font-family:'Space Grotesk',sans-serif;font-size:8pt;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+.cover h1{font-size:58pt;line-height:.92;letter-spacing:-.02em;font-variation-settings:'opsz' 144,'SOFT' 0,'WONK' 1;}
+.cover .sub{font-family:'Fraunces',serif;font-style:italic;font-variation-settings:'opsz' 90,'SOFT' 60;font-size:16pt;color:var(--tide-deep);margin-top:12pt;line-height:1.25;}
+
+.toc-row{display:flex;align-items:baseline;gap:10px;margin-bottom:6pt;}
+.toc-row .n{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:8.5pt;color:var(--tide-deep);width:24px;letter-spacing:.05em;}
+.toc-row .t{font-family:'Fraunces',serif;font-size:11.5pt;color:var(--ink);}
+.toc-row .d{flex:1;border-bottom:1px dotted var(--line-strong);transform:translateY(-3px);}
+.toc-row .p{font-family:'Space Grotesk',sans-serif;font-size:8.5pt;color:var(--muted);}
+.toc-row .sub{font-family:'Spectral',serif;font-size:8.2pt;color:var(--muted);font-style:italic;}
+
+.flow{flex:1;}
+.two-col-head{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;}
+.note{font-size:8.6pt;color:var(--muted);font-style:italic;}
+.colorbar{height:6px;width:100%;display:flex;border-radius:3px;overflow:hidden;margin:3pt 0 0;}
+.colorbar span{flex:1;}
+.qbox{background:var(--paper2);border-left:3px solid var(--ochre);border-radius:3px;padding:9pt 12pt;margin:7pt 0;}
+.qbox .label{color:var(--ochre);}
+.openq{font-family:'Fraunces',serif;font-style:italic;font-size:10.5pt;color:var(--indigo);line-height:1.4;margin:3pt 0 0;}
+
+/* SITE NAV */
+.sitenav{position:sticky;top:0;z-index:100;background:var(--paper);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,5vw,40px);height:44px;gap:16px;}
+.sitenav .home{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--tide-deep);text-decoration:none;white-space:nowrap;flex-shrink:0;}
+.sitenav .home:hover{color:var(--ochre);}
+.sitenav .pages{display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
+.sitenav .pages a{font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:4px 10px;border-radius:20px;border:1px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s,background .15s;}
+.sitenav .pages a:hover{color:var(--ink);border-color:var(--line);background:var(--paper2);}
+.sitenav .pages a.active{color:var(--tide-deep);border-color:rgba(34,94,89,.35);background:rgba(54,128,122,.07);}
+.sitenav .divpipe{width:1px;height:18px;background:var(--line);margin:0 4px;flex-shrink:0;}
+
+
+@media screen{.runhead{visibility:hidden;height:0;overflow:hidden;position:static;}}
+</style>
+</head>
+<body>
+<nav class="sitenav" aria-label="Site navigation"><a class="home" href="index.html">The Provision Ground</a><div class="divpipe"></div><div class="pages"><a href="prospectus.html">01 · Prospectus</a><a href="strengths.html">02 · Ground Truth</a><a href="atlas.html">03 · Atlas</a></div></nav>
+
+
+<!-- ============ COVER ============ -->
+<section class="sheet cover">
+  <div class="frame" style="background:var(--paper);">
+    <div>
+      <div class="meta">A Research Prospectus &nbsp;·&nbsp; Climate Change, Decolonization &amp; Global Blackness Lab &nbsp;·&nbsp; Duke University</div>
+      <svg class="tideline" style="margin:18pt 0 26pt;height:14px" viewBox="0 0 760 14" preserveAspectRatio="none">
+        <path d="M0 9 Q 60 1 120 7 T 240 7 T 360 6 T 480 8 T 600 6 T 720 7 L 760 7" fill="none" stroke="#36807A" stroke-width="1.4"/>
+        <path d="M0 12 Q 60 5 120 10 T 240 10 T 360 9 T 480 11 T 600 9 T 720 10 L 760 10" fill="none" stroke="#BE7B3A" stroke-width="1" opacity=".7"/>
+      </svg>
+    </div>
+
+    <div>
+      <div class="eyebrow" style="margin-bottom:14pt;">A program of inquiry for the work ahead</div>
+      <h1>The<br>Provision<br>Ground</h1>
+      <div class="sub">Climate, decoloniality, and the Black Atlantic:<br>research provocations, methods, and a publication<br>architecture for a multiyear program</div>
+    </div>
+
+    <div>
+      <svg class="tideline" style="margin:26pt 0 16pt;height:14px" viewBox="0 0 760 14" preserveAspectRatio="none">
+        <path d="M0 7 Q 60 13 120 7 T 240 7 T 360 8 T 480 6 T 600 8 T 720 7 L 760 7" fill="none" stroke="#1E3A57" stroke-width="1.2"/>
+      </svg>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+        <div class="meta" style="line-height:1.9;">
+          Prepared for &nbsp;Prof. Michaeline&nbsp;Crichlow<br>
+          By &nbsp;Cherryia&nbsp;White<br>
+          Re &nbsp;A research program for the CCDGB Lab
+        </div>
+        <div class="meta" style="text-align:right;line-height:1.9;">
+          June&nbsp;2026<br>
+          Durham · Bridgetown · the&nbsp;Lowcountry<br>
+          <span style="color:var(--tide-deep)">Open to revision at every level</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PREFATORY NOTE ============ -->
+<section class="sheet">
+  <div class="runhead"><span>The Provision Ground</span><span>Prefatory Note</span></div>
+  <div class="flow" style="margin-top:30pt;">
+    <div class="part-tag"><span class="eyebrow ochre">Prefatory note</span></div>
+    <h2 class="section">On the title, and on the aim</h2>
+    <svg class="tideline" style="margin:8pt 0 14pt;height:9px" viewBox="0 0 700 9" preserveAspectRatio="none"><path d="M0 5 Q 50 1 100 4 T 200 4 T 300 3 T 400 5 T 500 3 T 600 4 T 700 4" fill="none" stroke="#36807A" stroke-width="1.2"/></svg>
+
+    <p class="lead">The provision ground was the plot that enslaved people worked for themselves at the edge of the plantation. On it they grew food, saved seed, kept knowledge, and practiced a form of self direction the plantation was built to deny. It is the oldest site of Black ecological self determination in the Atlantic world, and it is the figure this program takes for its name.</p>
+
+    <p>The name is deliberate. It signals that the climate question pursued here is not only a question of harm and exposure but of knowledge, labor, and refusal, of what Black and Indigenous Atlantic communities have grown, kept, and built under precisely the conditions of duress that the climate horizon now generalizes. It also locates this work within a scholarly lineage the CCDGB Lab already commands, including the study of Caribbean peasantries and the post Creole imagination, while turning that lineage toward an environmental frontier.</p>
+
+    <p>This document is a prospectus, not a summary. It takes the lab's published theoretical architecture as given and asks a forward looking question: what might a sustained inquiry at the intersection of climate, decoloniality, and global Blackness investigate, what evidence would it require, and what would it publish. The brainstorm that preceded it proposed themes and questions. This prospectus proposes a frontier.</p>
+
+    <div class="card tide" style="margin:12pt 0;">
+      <h4 style="margin-top:0;">How to read this prospectus</h4>
+      <p class="small" style="margin-bottom:0;">Its center of gravity is Part II, a set of research provocations whose answers are not yet settled. Parts III through V supply the apparatus those provocations require: a structured agenda, the methods and data infrastructure, and a publication architecture in which every line of inquiry terminates in a discrete and citable scholarly output. Spatial and computational methods appear throughout, but as instruments in service of the questions rather than as the questions themselves.</p>
+    </div>
+
+    <p>The program is designed to cohere as a contribution the lab can carry into the CHCI Climate Futures initiative and well beyond it, toward a special issue, an edited volume, a body of peer reviewed scholarship, and a public archive. Every claim in what follows is offered provisionally and in good faith, and is open to correction.</p>
+
+    <p style="margin-top:10pt;font-family:'Fraunces',serif;font-style:italic;font-size:11.5pt;color:var(--indigo);">Respectfully submitted,</p>
+    <p style="font-family:'Fraunces',serif;font-size:15pt;font-variation-settings:'WONK' 1;color:var(--ink);margin-top:2pt;">Cherryia&nbsp;White</p>
+    <p class="tiny" style="color:var(--muted);">Geospatial and documentary methods · the OJAI archive, “Where the Tide Remembers”</p>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">02</span></div>
+</section>
+
+<!-- ============ CONTENTS ============ -->
+<section class="sheet">
+  <div class="runhead"><span>The Provision Ground</span><span>Contents</span></div>
+  <div class="flow" style="margin-top:30pt;">
+    <div class="part-tag"><span class="eyebrow">Contents</span></div>
+    <h2 class="section">The program in seven parts</h2>
+    <svg class="tideline" style="margin:8pt 0 16pt;height:9px" viewBox="0 0 700 9" preserveAspectRatio="none"><path d="M0 5 Q 50 1 100 4 T 200 4 T 300 3 T 400 5 T 500 3 T 600 4 T 700 4" fill="none" stroke="#36807A" stroke-width="1.2"/></svg>
+
+    <div class="toc-row"><span class="n">I</span><span class="t">Orientation</span><span class="d"></span><span class="p">04</span></div>
+    <div class="toc-row" style="margin-top:-2pt;margin-bottom:9pt;"><span class="n"></span><span class="sub">The program's wager, its publics, and the present moment</span></div>
+
+    <div class="toc-row"><span class="n">II</span><span class="t">Research Provocations</span><span class="d"></span><span class="p">07</span></div>
+    <div class="toc-row" style="margin-top:-2pt;margin-bottom:9pt;"><span class="n"></span><span class="sub">Eight questions at the frontier, whose answers are not yet settled</span></div>
+
+    <div class="toc-row"><span class="n">III</span><span class="t">From Provocations to Projects</span><span class="d"></span><span class="p">15</span></div>
+    <div class="toc-row" style="margin-top:-2pt;margin-bottom:9pt;"><span class="n"></span><span class="sub">An operational agenda: question, method, evidence, publication</span></div>
+
+    <div class="toc-row"><span class="n">IV</span><span class="t">Methods and Data</span><span class="d"></span><span class="p">18</span></div>
+    <div class="toc-row" style="margin-top:-2pt;margin-bottom:9pt;"><span class="n"></span><span class="sub">An evidence base, a spatial layer, and how the data is collected and shown</span></div>
+
+    <div class="toc-row"><span class="n">V</span><span class="t">A Publication Architecture</span><span class="d"></span><span class="p">23</span></div>
+    <div class="toc-row" style="margin-top:-2pt;margin-bottom:9pt;"><span class="n"></span><span class="sub">A special issue, a volume, articles, datasets, and a public archive</span></div>
+
+    <div class="toc-row"><span class="n">VI</span><span class="t">Teaching the Program</span><span class="d"></span><span class="p">27</span></div>
+    <div class="toc-row" style="margin-top:-2pt;margin-bottom:9pt;"><span class="n"></span><span class="sub">A graduate seminar and two ready to run sessions</span></div>
+
+    <div class="toc-row"><span class="n">VII</span><span class="t">Cadence and Coordination</span><span class="d"></span><span class="p">30</span></div>
+    <div class="toc-row" style="margin-top:-2pt;margin-bottom:9pt;"><span class="n"></span><span class="sub">The near term, the two year arc, and the division of labor</span></div>
+
+    <div class="toc-row"><span class="n">+</span><span class="t">Appendices</span><span class="d"></span><span class="p">33</span></div>
+    <div class="toc-row" style="margin-top:-2pt;"><span class="n"></span><span class="sub">Evidence and data sources, and a working glossary</span></div>
+
+    <div class="card ink" style="margin-top:22pt;">
+      <span class="eyebrow">The program in a sentence</span>
+      <p style="margin:8pt 0 0;font-family:'Fraunces',serif;font-style:italic;font-size:12.5pt;line-height:1.42;color:#efe8da;">
+      Climate vulnerability in the Black Atlantic is the inheritance of a five century plantation order, and the communities living at its sharp edge hold knowledge, practices, and forms of self determination that any credible climate future will require. This program asks what that knowledge can teach, and builds the scholarship to find out.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">03</span></div>
+</section>
+
+<!-- ============ PART I.1 ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part I · Orientation</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <div class="part-tag"><span class="part-num">I</span><span class="eyebrow" style="transform:translateY(-6px);">Orientation</span></div>
+    <h2 class="section">The wager, and the publics it must reach</h2>
+    <svg class="tideline" style="margin:8pt 0 12pt;height:9px" viewBox="0 0 700 9" preserveAspectRatio="none"><path d="M0 5 Q 50 1 100 4 T 200 4 T 300 3 T 400 5 T 500 3 T 600 4 T 700 4" fill="none" stroke="#36807A" stroke-width="1.2"/></svg>
+
+    <p class="lead">The program proceeds from a single wager, which the lab's scholarship has already established and which this prospectus does not restate so much as operationalize.</p>
+
+    <div class="cols">
+      <p>The wager is that the climate crisis cannot be adequately understood, much less addressed, as a purely scientific or technical matter. It is the long consequence of a world organized for extraction, of land, of labor, of water, and of breath. The theoretical optic the lab supplies, in which global Blackness is read as fugitive, fungible, and spectral, in which the break names both the rupture of colonial modernity and the opening it leaves, and in which decoloniality designates the refusal of that modernity's terms, does explanatory work that mainstream environmental discourse cannot.</p>
+
+      <p>Placed beside the climate question, this optic accounts for why the geography of harm assumes the shape it does, why flood, petrochemical corridor, and eroding shoreline so reliably find the same communities. It treats the plantation not as a closed historical chapter but as an operating infrastructure that still organizes soil, drainage, coastline, and settlement. And it locates, in the very communities that order dispossessed, the ecological knowledge and imaginative capacity that any livable future will require.</p>
+
+      <p>What this program adds is neither a restatement of the theory nor a single technique, but a sustained inquiry: a set of questions worth a multiyear program, the evidence and methods adequate to them, and the scholarly forms in which their answers can travel. The provision ground is the program's emblem because it holds both halves of the wager at once, the violence of the plantation and the self direction practiced at its edge.</p>
+
+      <p>The sections that follow assume this orientation and do not argue it again. They turn instead to what is not yet known.</p>
+    </div>
+
+    <h3>Three publics, and the obligation to reach all three</h3>
+    <div class="grid3" style="margin-top:6pt;">
+      <div class="card tide"><span class="label">The scholarly field</span><p class="small" style="margin:5pt 0 0;">Peer review, the CHCI network, and journals such as <em>Cultural Dynamics</em>. This public requires rigor, citation, and a demonstrable contribution to debates on decoloniality, the environmental humanities, and the archive.</p></div>
+      <div class="card ochre"><span class="label">The public sphere</span><p class="small" style="margin:5pt 0 0;">Policy audiences, cultural institutions, and general readers. This public requires the argument made legible and consequential, in essays, exhibitions, and accessible scholarship.</p></div>
+      <div class="card" style="border-left:3px solid var(--indigo);"><span class="label">The communities</span><p class="small" style="margin:5pt 0 0;">The people whose knowledge constitutes the evidence. This public requires that the work be answerable to them and returned to them, as authorship and not extraction.</p></div>
+    </div>
+    <p class="small" style="margin-top:10pt;">The methodological commitment of the program is that a single body of carefully gathered evidence can address all three publics at once, that a finding rigorous enough for a journal can also be legible to a policymaker and accountable to a community. This is difficult, and the difficulty is the point. It is also, as Part V argues, the basis on which the program becomes genuinely publishable rather than merely productive.</p>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">04</span></div>
+</section>
+
+<!-- ============ PART I.2 ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part I · Orientation</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <span class="eyebrow ochre">The present moment · CHCI Climate Futures</span>
+    <h3 style="font-size:16pt;margin-top:6pt;">A near term occasion for a long term program</h3>
+
+    <p>The CHCI Climate Futures initiative, the 2026 to 2027 program of the Consortium of Humanities Centers and Institutes, supported by the Mellon Foundation, provides a timely occasion. It is deliberately member driven and flexible, designed to carry projects ranging from local programs to large multinational collaborations rather than a single fixed format. That flexibility rewards an inquiry that is at once theoretically serious, internationally networked, and publicly legible, which is to say it rewards precisely the program described here. The initiative's nearest submission falls on the twenty first of June, and Part VII treats that horizon in detail.</p>
+
+    <p class="small">It bears emphasis that this program does not begin from nothing. It proposes to extend and to document an architecture and an evidentiary base that already exist, rather than to build either from the ground up. The table below states the relationship plainly.</p>
+
+    <div class="card tide" style="margin:8pt 0;">
+      <h4 style="margin-top:0;">What the program can credibly advance, and the foundation already in place</h4>
+      <table class="matrix" style="margin-top:6pt;">
+        <tr><th style="width:42%">The claim to be advanced</th><th>The foundation already established</th></tr>
+        <tr><td>A decolonial framework adequate to the climate question</td><td>The lab's published scholarship, including the 2025 Routledge volume, now open access</td></tr>
+        <tr><td>A standing, community embedded evidence base</td><td>The OJAI archive, already gathering testimony and media across Atlantic diaspora sites</td></tr>
+        <tr><td>International and interdisciplinary reach</td><td>Existing relationships across the American South, the Caribbean, and the wider Atlantic, and SALISES and UWI ties</td></tr>
+        <tr><td>A method that decolonizes the archive in practice</td><td>Community co creation and oral history conceived as service rather than extraction</td></tr>
+      </table>
+    </div>
+
+    <h3>A brief diagnostic on where the leverage lies</h3>
+    <div class="grid2" style="margin-top:6pt;">
+      <div>
+        <h4>The strongest scholarly contribution</h4>
+        <p class="small">The provocations of Part II, taken together, constitute a coherent and original research line that no single discipline currently occupies. Leading with the questions, rather than with any one method or platform, signals a program of inquiry rather than a service offering.</p>
+        <h4>The most defensible scope</h4>
+        <p class="small">Two anchor geographies for the funded period, the Carolina and Gullah Geechee Lowcountry and one Caribbean node, with the wider Atlantic retained as a documented horizon. Depth of evidence will persuade reviewers more than breadth of ambition.</p>
+      </div>
+      <div>
+        <h4>The risk to be managed</h4>
+        <p class="small">Ambition that reads as unfundable. The remedy is sequencing, as Part VII sets out, so that each phase yields a discrete and reviewable output, an article, a dataset, an exhibition, and the program never rests on every element succeeding at once.</p>
+        <h4>The underused asset</h4>
+        <p class="small">Publication design itself. Treating the program's outputs as a deliberate architecture, rather than as a series of one off products, multiplies their scholarly value and their legibility to a funder. Part V develops this.</p>
+      </div>
+    </div>
+
+    <div class="pull">Climate and environment are the threads that bind democracy, migration, technology, and racial justice. This program follows those threads through the body, the land, the archive, and the ground that fed a people the plantation meant to starve.
+      <span class="by">Stated as the program's premise</span></div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">05</span></div>
+</section>
+
+<!-- ============ PART I.3 ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part I · Orientation</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <span class="eyebrow">The substrate and what grows from it</span>
+    <h3 style="font-size:16pt;margin-top:6pt;">Six lenses, one stratigraphy</h3>
+    <p class="small">The six organizing lenses that the preceding brainstorm proposed are not six separate projects. They are six readings of a single terrain, and they are best understood as strata. The plantation is the substrate; everything else accumulates, moves, survives, and imagines upon it. The provocations of Part II then drill down through these strata to reach questions that none of the lenses, on its own, can answer.</p>
+
+    <svg viewBox="0 0 700 350" style="width:100%;height:auto;margin:6pt 0 4pt;">
+      <g font-family="Space Grotesk, sans-serif">
+        <g>
+          <rect x="30" y="18" width="640" height="46" rx="4" fill="#11212E"/>
+          <text x="46" y="38" fill="#86c5bd" font-size="9" letter-spacing="1.5">06 · IMAGINATION</text>
+          <text x="46" y="54" fill="#efe8da" font-size="10" font-family="Spectral, serif">Afrofuturism and the climate imagination: futures conceived beyond the plantation</text>
+        </g>
+        <g>
+          <rect x="30" y="70" width="640" height="46" rx="4" fill="#1E3A57"/>
+          <text x="46" y="90" fill="#bcd0e0" font-size="9" letter-spacing="1.5">05 · ACCUMULATION</text>
+          <text x="46" y="106" fill="#eef2f6" font-size="10" font-family="Spectral, serif">Colonial toxicity and slow violence: Cancer Alley, redlined soil, poisoned water</text>
+        </g>
+        <g>
+          <rect x="30" y="122" width="640" height="46" rx="4" fill="#2f6f6a"/>
+          <text x="46" y="142" fill="#d7ece8" font-size="9" letter-spacing="1.5">04 · MEMORY</text>
+          <text x="46" y="158" fill="#f1faf8" font-size="10" font-family="Spectral, serif">The body as climate archive: grief, gesture, ritual, the wake</text>
+        </g>
+        <g>
+          <rect x="30" y="174" width="640" height="46" rx="4" fill="#7a8c54"/>
+          <text x="46" y="194" fill="#f0f4e4" font-size="9" letter-spacing="1.5">03 · PRACTICE</text>
+          <text x="46" y="210" fill="#fbfdf5" font-size="10" font-family="Spectral, serif">Sovereignty and stewardship: resilience as deliberate political practice</text>
+        </g>
+        <g>
+          <rect x="30" y="226" width="640" height="46" rx="4" fill="#BE7B3A"/>
+          <text x="46" y="246" fill="#3a2410" font-size="9" letter-spacing="1.5">02 · MOVEMENT</text>
+          <text x="46" y="262" fill="#2a1908" font-size="10" font-family="Spectral, serif">Displacement and the climate diaspora: from the Middle Passage to Katrina</text>
+        </g>
+        <g>
+          <rect x="30" y="278" width="640" height="54" rx="4" fill="#11212E"/>
+          <text x="46" y="300" fill="#d9a566" font-size="9" letter-spacing="1.5">01 · SUBSTRATE, THE FOUNDATION</text>
+          <text x="46" y="318" fill="#efe8da" font-size="10.5" font-family="Spectral, serif">The plantation as climate infrastructure: the technology that organized land, water, and air</text>
+        </g>
+      </g>
+    </svg>
+    <p class="tiny" style="color:var(--muted);text-align:center;">Read from the bottom upward. The plantation is the ground on which the other strata rest, and the provision ground is the seam of self direction running through all of them.</p>
+
+    <div class="rule"></div>
+    <p class="small">The value of the stratigraphic model is that it gives the program a spine rather than a scatter, and a single sentence any collaborator can carry: the program studies what the plantation built, what survived it, and what is being grown in its place. Each provocation that follows can be located against these strata, and each scholarly output can declare which stratum it works in, so that the parts continue to sum to a whole.</p>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">06</span></div>
+</section>
+
+<!-- ============ PART II — intro ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part II · Research Provocations</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <div class="part-tag"><span class="part-num">II</span><span class="eyebrow" style="transform:translateY(-6px);">Research Provocations</span></div>
+    <h2 class="section">Eight questions at the frontier</h2>
+    <svg class="tideline" style="margin:8pt 0 12pt;height:9px" viewBox="0 0 700 9" preserveAspectRatio="none"><path d="M0 5 Q 50 1 100 4 T 200 4 T 300 3 T 400 5 T 500 3 T 600 4 T 700 4" fill="none" stroke="#36807A" stroke-width="1.2"/></svg>
+
+    <p class="lead">What follows is the substance of the program. Each provocation poses a question whose answer is not presently known, to this author or, so far as the available scholarship indicates, to the field. They are offered as the frontier the program would work toward, not as conclusions it would illustrate.</p>
+
+    <p>Several conventions govern this section. Each provocation states a frame drawn from the lab's own conceptual vocabulary, then the open questions it raises, then the stakes of answering them, and finally the scholarly forms in which an answer could be published. The questions are written to be genuinely answerable within a sustained program, yet genuinely uncertain in their outcome, which is the condition of original research. Where a provocation could resolve in more than one direction, that openness is named rather than concealed.</p>
+
+    <p>The eight are not of equal scale. The first four are treated at length, because each opens an independent line of inquiry capable of anchoring articles, datasets, and collaborations on its own. The remaining four are stated more briefly, as near adjacent frontiers that the same evidence base would render tractable. A closing note gathers several further questions that the program would hold in reserve.</p>
+
+    <div class="card ink" style="margin-top:6pt;">
+      <span class="eyebrow">The eight, in brief</span>
+      <table class="matrix" style="margin-top:7pt;">
+        <tr><th style="width:6%;color:#86c5bd;border-color:rgba(255,255,255,.25)"></th><th style="color:#86c5bd;border-color:rgba(255,255,255,.25)">Provocation</th><th style="color:#86c5bd;border-color:rgba(255,255,255,.25)">The question in a phrase</th></tr>
+        <tr style="color:#e9e2d4"><td><strong>I</strong></td><td style="border-color:rgba(255,255,255,.12)">The Provision Ground as Climate Science</td><td style="border-color:rgba(255,255,255,.12)">Is subsistence agronomy an unrecognized adaptation archive?</td></tr>
+        <tr style="color:#e9e2d4"><td><strong>II</strong></td><td style="border-color:rgba(255,255,255,.12)">Fungibility and the Price of Climate</td><td style="border-color:rgba(255,255,255,.12)">Do carbon markets revive the logic of fungible Black life?</td></tr>
+        <tr style="color:#e9e2d4"><td><strong>III</strong></td><td style="border-color:rgba(255,255,255,.12)">The Spectral and the Sensor</td><td style="border-color:rgba(255,255,255,.12)">Can the unmeasured be read as evidence?</td></tr>
+        <tr style="color:#e9e2d4"><td><strong>IV</strong></td><td style="border-color:rgba(255,255,255,.12)">Creole Ecologies</td><td style="border-color:rgba(255,255,255,.12)">Is creolization an ecological theory, not only a cultural one?</td></tr>
+        <tr style="color:#e9e2d4"><td><strong>V</strong></td><td style="border-color:rgba(255,255,255,.12)">Thermal Afterlives</td><td style="border-color:rgba(255,255,255,.12)">Is today's heat inequality continuous with plantation labor?</td></tr>
+        <tr style="color:#e9e2d4"><td><strong>VI</strong></td><td style="border-color:rgba(255,255,255,.12)">Hydro Archives</td><td style="border-color:rgba(255,255,255,.12)">Can a watershed be read as a historical document?</td></tr>
+        <tr style="color:#e9e2d4"><td><strong>VII</strong></td><td style="border-color:rgba(255,255,255,.12)">A Reparations Ecology</td><td style="border-color:rgba(255,255,255,.12)">What would repair designed from sovereignty require?</td></tr>
+        <tr style="color:#e9e2d4"><td><strong>VIII</strong></td><td style="border-color:rgba(255,255,255,.12)">Chronotopes of the Break</td><td style="border-color:rgba(255,255,255,.12)">Do plantation, climate, and diasporic time align or interfere?</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">07</span></div>
+</section>
+
+<!-- ============ PROVOCATION I ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part II · Research Provocations</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <div class="part-tag"><span class="prov-num">I</span><span class="eyebrow" style="transform:translateY(-5px);">Provocation</span></div>
+    <h3 style="font-size:19pt;margin-top:4pt;line-height:1.08;">The Provision Ground as Climate Science</h3>
+    <p class="lead" style="font-size:11pt;">Within the plantation, enslaved people cultivated the provision ground, the marginal plot on which they grew their own food. This program asks whether that ground, and its diasporic kin, constitutes an unrecognized body of climate adaptive knowledge.</p>
+
+    <p class="small"><strong>The frame.</strong> The lab's scholarship on Caribbean peasantries already treats the provision ground as a site of incipient autonomy. Set beside the climate question, it becomes something further. The provision ground and its relations, the Gullah yard garden, the Brazilian roça, the Garifuna and Caribbean conuco, were refined under exactly the conditions, scarcity, heat, salt, flood, and soil exhaustion, that now define the climate horizon for the wider world. Polyculture, intercropping, seed saving, the selection of flood and drought tolerant cultivars, and water and shade management were practiced there not as heritage but as survival science.</p>
+
+    <div class="qbox">
+      <span class="label">The open questions</span>
+      <p class="openq">Can this agronomic knowledge be reconstructed with enough specificity, from oral history, surviving practice, herbaria, and colonial records, to be tested against contemporary adaptation science? Where it diverges from the prevailing orthodoxy of climate smart agriculture, which is the sounder guide? Does the provision ground preserve cultivars or techniques that institutional science has overlooked, and if so, what follows for how adaptation is funded and designed?</p>
+    </div>
+
+    <p class="small">These are not rhetorical questions. The author does not know whether the reconstruction is feasible at the needed resolution, nor whether the practices would outperform current recommendations, nor where they would fail. That uncertainty is the reason the inquiry is worth a program rather than an essay.</p>
+
+    <div class="grid2" style="margin-top:4pt;">
+      <div>
+        <h4>Why it breaks ground</h4>
+        <p class="small">It reframes Black ecological knowledge from cultural heritage to testable expertise, and it places the humanities in a position to revise, not merely to contextualize, a scientific and policy field. It also gives the program its title and its moral center, the ground of self direction rather than the ground of harm.</p>
+      </div>
+      <div>
+        <h4>What it would publish</h4>
+        <p class="small">A peer reviewed article positioned across environmental humanities and agrarian studies; a curated and citable register of cultivars and practices with documented provenance, suitable for a data journal; and a field guide that returns the knowledge to the communities that hold it.</p>
+      </div>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">08</span></div>
+</section>
+
+<!-- ============ PROVOCATION II ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part II · Research Provocations</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <div class="part-tag"><span class="prov-num">II</span><span class="eyebrow" style="transform:translateY(-5px);">Provocation</span></div>
+    <h3 style="font-size:19pt;margin-top:4pt;line-height:1.08;">Fungibility and the Price of Climate</h3>
+    <p class="lead" style="font-size:11pt;">The lab reads global Blackness as fungible, rendered exchangeable and convertible into value. This program asks whether the same logic now organizes the financial machinery of climate response.</p>
+
+    <p class="small"><strong>The frame.</strong> Fungibility is among the most precise of the lab's concepts: it names the rendering of Black life as interchangeable, abstractable, priceable. The contemporary apparatus of climate finance trades in abstractions of a strikingly similar form. Carbon offset markets render a hectare of forest or a community's land exchangeable against a distant corporation's emissions. Catastrophe bonds and parametric insurance price and trade the risk of disaster. A growing field of resilience finance converts vulnerability itself into an asset class. In each case a living relation to land is made into a tradable quantity.</p>
+
+    <div class="qbox">
+      <span class="label">The open questions</span>
+      <p class="openq">Is the carbon offset a contemporary technology of fungibility, and does its burden fall, as before, disproportionately on Black and Indigenous land? What happens to a community's relation to place when that place becomes a climate abstraction owned and traded elsewhere? And can fungibility, a concept developed within Black critical theory, perform analytic work on these instruments that conventional political economy does not?</p>
+    </div>
+
+    <p class="small">Whether the analogy holds under scrutiny is genuinely uncertain. It may be that offset markets differ from chattel fungibility in ways that matter more than their resemblance, and the program would be obligated to find that out rather than to assume it. The value of the question lies precisely in its being open.</p>
+
+    <div class="grid2" style="margin-top:4pt;">
+      <div>
+        <h4>Why it breaks ground</h4>
+        <p class="small">It builds an original bridge between Black studies and the financialization of climate, a juncture that neither literature currently occupies. It carries the lab's decolonial argument directly into the domain of policy and capital, where climate decisions are in fact being made.</p>
+      </div>
+      <div>
+        <h4>What it would publish</h4>
+        <p class="small">A theoretical article positioned for a leading journal in critical theory or environmental humanities; a critical lexicon of climate finance instruments read through fungibility; and a public facing essay translating the argument for a policy readership.</p>
+      </div>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">09</span></div>
+</section>
+
+<!-- ============ PROVOCATION III ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part II · Research Provocations</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <div class="part-tag"><span class="prov-num">III</span><span class="eyebrow" style="transform:translateY(-5px);">Provocation</span></div>
+    <h3 style="font-size:19pt;margin-top:4pt;line-height:1.08;">The Spectral and the Sensor</h3>
+    <p class="lead" style="font-size:11pt;">The lab's figure of the spectral names a presence that haunts, felt but not captured. Set against the apparatus of environmental measurement, it becomes a method for reading what the instruments cannot see.</p>
+
+    <p class="small"><strong>The frame.</strong> The contemporary environment is known largely through measurement: satellites, sensor networks, and screening tools such as the federal environmental justice indices. Every regime of measurement, however, produces its own structured blindness. Monitoring stations are unevenly placed. Records are kept for some harms and not others. Certain knowledges were never inscribed because those who held them were never asked. The spectral, in this setting, ceases to be only a literary figure and becomes a research instrument trained on the negative space of the data.</p>
+
+    <div class="qbox">
+      <span class="label">The open questions</span>
+      <p class="openq">Where are the environmental data deserts, and do they coincide with historically Black and Indigenous geographies, such that the communities most exposed are also the least measured? What would it mean to treat absence, the unmeasured and the unrecorded and the haunting, as itself a form of evidence rather than a mere gap? And can a disciplined practice of counter data, of reading what the sensor fails to register, be built and defended as method?</p>
+    </div>
+
+    <p class="small">The program does not assume that the gaps will align neatly with the geography of dispossession, though there is reason to suspect they often do. Establishing where they do and do not, and why, is itself a finding. This provocation also disciplines the program's own use of measurement, since it begins from the premise that data is never neutral or complete.</p>
+
+    <div class="grid2" style="margin-top:4pt;">
+      <div>
+        <h4>Why it breaks ground</h4>
+        <p class="small">It converts a theoretical figure into a method, and it contributes to the emerging field of data justice a distinctively decolonial account of absence. It also models intellectual honesty about the limits of the program's own instruments.</p>
+      </div>
+      <div>
+        <h4>What it would publish</h4>
+        <p class="small">A methodological article; a digital scholarly object that documents the geography of the unmeasured, a map of what is not measured rather than of what is; and a reusable dataset of identified data deserts with their archival correlates.</p>
+      </div>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">10</span></div>
+</section>
+
+<!-- ============ PROVOCATION IV ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part II · Research Provocations</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <div class="part-tag"><span class="prov-num">IV</span><span class="eyebrow" style="transform:translateY(-5px);">Provocation</span></div>
+    <h3 style="font-size:19pt;margin-top:4pt;line-height:1.08;">Creole Ecologies</h3>
+    <p class="lead" style="font-size:11pt;">The post Creole imagination treats creolization, the unplanned emergence of new forms from forced encounter, as a generative cultural logic. This program asks whether creolization is also an ecological logic.</p>
+
+    <p class="small"><strong>The frame.</strong> Creolization theory describes how the new arises from coerced mixture, improvisation under constraint, and recombination rather than restoration of an origin. Atlantic landscapes shaped by the plantation are themselves creolized in just this sense. The ruined estate, the dredged and rerouted estuary, the species introduced and naturalized across centuries, the ruderal growth that colonizes contaminated ground: these are neither pristine nor simply degraded but recombinant, carrying the signature of empire in their very composition. The dominant restoration paradigm, by contrast, often longs for a baseline before contact that no longer exists and perhaps never did.</p>
+
+    <div class="qbox">
+      <span class="label">The open questions</span>
+      <p class="openq">Can creolization theory describe how damaged Atlantic ecologies actually recover and recombine, more truthfully than a restoration ethic organized around a lost origin? What is owed to novel ecosystems that bear the mark of slavery and empire, and on what grounds? Does a creole ecology change what conservation and restoration should aim at in landscapes that were never innocent of history?</p>
+    </div>
+
+    <p class="small">It is far from settled that a cultural theory can be carried responsibly into ecology, and the program would have to test the translation against the science rather than assert it. The reward, if the translation holds, is a genuinely new way of valuing the landscapes the plantation left behind.</p>
+
+    <div class="grid2" style="margin-top:4pt;">
+      <div>
+        <h4>Why it breaks ground</h4>
+        <p class="small">It joins Caribbean theory to live debates in restoration ecology and the study of novel ecosystems, a pairing that is, to this author's knowledge, unmade. It is the kind of question that can only be pursued across the humanities and the sciences together.</p>
+      </div>
+      <div>
+        <h4>What it would publish</h4>
+        <p class="small">An article co authorable with an ecologist and positioned for an interdisciplinary venue; a field and photographic essay on creolized landscapes; and a contribution to the ethics of restoration.</p>
+      </div>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">11</span></div>
+</section>
+
+<!-- ============ PROVOCATIONS V & VI ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part II · Research Provocations</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <span class="eyebrow">Near adjacent frontiers</span>
+    <h3 style="font-size:15pt;margin-top:6pt;">Four further questions the same evidence base would open</h3>
+    <p class="small">The provocations below are stated more briefly. Each is independently publishable, and each draws on the methods and the fieldwork the first four already require, so that the program gains them at a low marginal cost.</p>
+
+    <div class="card tide" style="margin-top:8pt;">
+      <div class="two-col-head"><span class="prov-num" style="font-size:20pt;">V</span><div><h4 style="margin:0;">Thermal Afterlives</h4><p class="small" style="margin:2pt 0 0;">Heat as the connective tissue from the plantation labor regime to the present.</p></div></div>
+      <p class="small" style="margin:7pt 0 0;">The disciplining of the laboring body under heat was central to plantation production. Extreme heat now falls most heavily on Black agricultural, outdoor, and incarcerated workers. <strong>The open question:</strong> can a continuous history of thermal inequality be written, one that links the plantation's management of heat and labor to today's distribution of heat death, and would that history change how heat policy is framed? <strong>It would publish</strong> as an article across labor history and public health, accompanied by an oral history of working in heat.</p>
+    </div>
+
+    <div class="card ochre" style="margin-top:10pt;">
+      <div class="two-col-head"><span class="prov-num" style="font-size:20pt;color:var(--ochre);">VI</span><div><h4 style="margin:0;">Hydro Archives</h4><p class="small" style="margin:2pt 0 0;">Specific waters read at once as documents of violence and as kin.</p></div></div>
+      <p class="small" style="margin:7pt 0 0;">Tidal creeks, blackwater swamps, aquifers, and the Atlantic itself hold both the sediment of historical violence and, within Black and Indigenous cosmologies, the status of relations rather than resources. <strong>The open question:</strong> can a watershed be read as a historical document, and what does sound, the recorded voice of a water body and its surround, register that a map cannot? <strong>It would publish</strong> as a hydro archive and a series of sonic essays, with an accompanying article on water as method.</p>
+    </div>
+
+    <p class="small" style="margin-top:10pt;">Provocations V and VI share a commitment that runs through the whole program: that evidence is not confined to what can be plotted on a coordinate plane. The body in heat and the voice of a river are data of a different order, and the methods of Part IV are built to gather them.</p>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">12</span></div>
+</section>
+
+<!-- ============ PROVOCATIONS VII & VIII ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part II · Research Provocations</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <span class="eyebrow">Near adjacent frontiers, continued</span>
+    <h3 style="font-size:15pt;margin-top:6pt;">From repair to time</h3>
+
+    <div class="card tide" style="margin-top:8pt;">
+      <div class="two-col-head"><span class="prov-num" style="font-size:20pt;">VII</span><div><h4 style="margin:0;">A Reparations Ecology</h4><p class="small" style="margin:2pt 0 0;">Community led repair as a coherent paradigm, distinct from carbon accounting.</p></div></div>
+      <p class="small" style="margin:7pt 0 0;">Across the Atlantic, communities already practice forms of environmental repair that the dominant climate vocabulary does not recognize as such: land return, Gullah and Garifuna restoration of marsh and mangrove, Quilombo land titling, the rebuilding of provision grounds. <strong>The open question:</strong> can these be theorized together as a reparations ecology, a paradigm of repair designed from the sovereignty tradition rather than from emissions arithmetic, and what would such repair require of states and institutions? <strong>It would publish</strong> as a framework article and a case archive, with a policy facing paper for a wider readership.</p>
+    </div>
+
+    <div class="card ochre" style="margin-top:10pt;">
+      <div class="two-col-head"><span class="prov-num" style="font-size:20pt;color:var(--ochre);">VIII</span><div><h4 style="margin:0;">Chronotopes of the Break</h4><p class="small" style="margin:2pt 0 0;">Plantation time, climate time, and diasporic time, in collision.</p></div></div>
+      <p class="small" style="margin:7pt 0 0;">Three temporalities meet in this work and do not obviously agree: plantation time, the cyclical time of extraction; climate time, the slow violence and deep time and abrupt tipping points of the earth system; and diasporic time, the wake, the co presence of ancestor and descendant, the Afrofuturist future folded into the present. <strong>The open question:</strong> do these times align, or interfere, and what follows for how a community's climate future can truthfully be narrated? <strong>It would publish</strong> as a theoretical article on temporality, the program's most purely conceptual contribution.</p>
+    </div>
+
+    <div class="rule"></div>
+    <h4>Further frontiers, held in reserve</h4>
+    <p class="small">Several additional questions sit within reach of the same program and are recorded here so that they are not lost. Each could be activated as the evidence accumulates.</p>
+    <ul class="clean small">
+      <li><strong>Managed retreat as second displacement.</strong> When the state relocates a coastal community, does it repeat the structure of forced removal, and how do communities that have already survived displacement understand and contest the new one?</li>
+      <li><strong>The soil as witness.</strong> Can soil science, the lead, the residues, the stratigraphy of a contaminated lot, be read alongside testimony as a material archive of slow violence?</li>
+      <li><strong>Fugitive cartography.</strong> Is there a way to map that honors opacity, that withholds and marks refusal rather than claiming total knowledge, and what would such a practice contribute to critical mapping? This question is taken up methodologically in Part IV.</li>
+    </ul>
+
+    <div class="pull" style="border-color:var(--ochre);">A research program is strongest not where it has answers but where it has the right questions, held openly and pursued with the discipline to be surprised by what they yield.
+      <span class="by">The premise of this section</span></div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">13</span></div>
+</section>
+
+<!-- ============ PROVOCATIONS SYNTHESIS ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part II · Research Provocations</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <span class="eyebrow ochre">How the eight cohere</span>
+    <h3 style="font-size:16pt;margin-top:6pt;">One program, not eight projects</h3>
+    <p class="small">The provocations are distinct, but they are not unrelated. Read against the stratigraphy of Part I, they distribute across the strata and bind them, and read against one another they form a single argument: that the plantation order produced the climate crisis, that its logics persist in the present in measurable and contestable forms, and that the communities it dispossessed hold knowledge and practices of repair the future will require.</p>
+
+    <svg viewBox="0 0 700 250" style="width:100%;height:auto;margin:8pt 0 4pt;font-family:'Space Grotesk',sans-serif;">
+      <!-- central spine -->
+      <line x1="350" y1="20" x2="350" y2="230" stroke="#11212E" stroke-opacity=".25" stroke-width="1.5"/>
+      <text x="350" y="14" text-anchor="middle" font-size="8" fill="#5a5043" letter-spacing="1.5">THE PROVISION GROUND</text>
+      <!-- left: the order and its persistence -->
+      <text x="40" y="40" font-size="8" fill="#7C3327" letter-spacing="1.5">THE ORDER AND ITS PERSISTENCE</text>
+      <g font-size="8.5" fill="#11212E" font-family="Spectral, serif">
+        <text x="40" y="62">II · Fungibility in climate finance</text>
+        <text x="40" y="84">III · The unmeasured and the sensor</text>
+        <text x="40" y="106">V · Thermal inequality across time</text>
+        <text x="40" y="128">VIII · Colliding temporalities</text>
+      </g>
+      <g stroke="#7C3327" stroke-opacity=".4" stroke-width="1">
+        <line x1="300" y1="58" x2="348" y2="90"/><line x1="300" y1="80" x2="348" y2="100"/>
+        <line x1="300" y1="102" x2="348" y2="115"/><line x1="300" y1="124" x2="348" y2="128"/>
+      </g>
+      <!-- right: knowledge and repair -->
+      <text x="660" y="40" text-anchor="end" font-size="8" fill="#225e59" letter-spacing="1.5">KNOWLEDGE AND REPAIR</text>
+      <g font-size="8.5" fill="#11212E" font-family="Spectral, serif" text-anchor="end">
+        <text x="660" y="62">I · Provision ground agronomy</text>
+        <text x="660" y="84">IV · Creole ecologies</text>
+        <text x="660" y="106">VI · Waters as archive and kin</text>
+        <text x="660" y="128">VII · A reparations ecology</text>
+      </g>
+      <g stroke="#225e59" stroke-opacity=".4" stroke-width="1">
+        <line x1="400" y1="58" x2="352" y2="90"/><line x1="400" y1="80" x2="352" y2="100"/>
+        <line x1="400" y1="102" x2="352" y2="115"/><line x1="400" y1="124" x2="352" y2="128"/>
+      </g>
+      <circle cx="350" cy="128" r="6" fill="#36807A" stroke="#fff" stroke-width="1.5"/>
+      <text x="350" y="170" text-anchor="middle" font-size="8.5" fill="#5a5043" font-family="Spectral,serif" font-style="italic" width="300">The left asks how the plantation order survives; the right asks what survived it,</text>
+      <text x="350" y="184" text-anchor="middle" font-size="8.5" fill="#5a5043" font-family="Spectral,serif" font-style="italic">and what is being grown in its place.</text>
+    </svg>
+
+    <div class="rule"></div>
+    <p class="small">This division is heuristic, not rigid. Provocation III disciplines the whole program's relation to evidence; Provocation VIII frames its sense of time; the provision ground of Provocation I gives the program its name and its ethical orientation. Taken together they are designed to be more than the sum of their articles, which is the condition under which the work becomes a special issue and an edited volume rather than a scattering of papers, as Part V proposes.</p>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">14</span></div>
+</section>
+
+<!-- ============ PART III — intro + matrix ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part III · From Provocations to Projects</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <div class="part-tag"><span class="part-num">III</span><span class="eyebrow" style="transform:translateY(-6px);">From Provocations to Projects</span></div>
+    <h2 class="section">An operational agenda</h2>
+    <svg class="tideline" style="margin:8pt 0 12pt;height:9px" viewBox="0 0 700 9" preserveAspectRatio="none"><path d="M0 5 Q 50 1 100 4 T 200 4 T 300 3 T 400 5 T 500 3 T 600 4 T 700 4" fill="none" stroke="#36807A" stroke-width="1.2"/></svg>
+
+    <p class="lead">A frontier becomes a fundable program only when its questions are translated into projects with a defined method, an evidence base, and a publication. This section performs that translation and sequences the result.</p>
+
+    <p class="small">The translation does not collapse the provocations into a checklist. It assigns to each a primary scholarly form and a realistic position on two axes a funder weighs: how achievable the work is within a two year window, and how far its results will travel. Plotting the projects honestly, rather than presenting them all as equally ready, is itself a signal of judgment. The visionary projects are named as the program's horizon; the tractable ones are named as its point of departure.</p>
+
+    <svg viewBox="0 0 700 400" style="width:100%;height:auto;margin:6pt 0 0;font-family:'Space Grotesk',sans-serif;">
+      <rect x="60" y="20" width="600" height="330" fill="#ECE2D0" opacity=".5" rx="4"/>
+      <line x1="60" y1="350" x2="660" y2="350" stroke="#11212E" stroke-width="1.2"/>
+      <line x1="60" y1="20" x2="60" y2="350" stroke="#11212E" stroke-width="1.2"/>
+      <line x1="360" y1="20" x2="360" y2="350" stroke="#11212E" stroke-opacity=".15" stroke-dasharray="3 4"/>
+      <line x1="60" y1="185" x2="660" y2="185" stroke="#11212E" stroke-opacity=".15" stroke-dasharray="3 4"/>
+      <text x="360" y="378" text-anchor="middle" font-size="9" letter-spacing="1.5" fill="#5a5043">ACHIEVABLE WITHIN TWO YEARS  →</text>
+      <text x="38" y="185" text-anchor="middle" font-size="9" letter-spacing="1.5" fill="#5a5043" transform="rotate(-90 38 185)">SCHOLARLY REACH  →</text>
+      <text x="200" y="40" text-anchor="middle" font-size="7.5" fill="#7C3327" letter-spacing="1">THE HORIZON</text>
+      <text x="540" y="40" text-anchor="middle" font-size="7.5" fill="#225e59" letter-spacing="1">BEGIN HERE</text>
+      <g font-size="8.5" font-weight="600">
+        <circle cx="575" cy="78" r="11" fill="#36807A"/><text x="575" y="81.5" text-anchor="middle" fill="#fff" font-size="8">I</text>
+        <text x="575" y="58" text-anchor="middle" fill="#11212E">Provision ground study</text>
+        <circle cx="500" cy="120" r="11" fill="#36807A"/><text x="500" y="123.5" text-anchor="middle" fill="#fff" font-size="8">VII</text>
+        <text x="500" y="148" text-anchor="middle" fill="#11212E">Reparations ecology</text>
+        <circle cx="250" cy="95" r="11" fill="#7C3327"/><text x="250" y="98.5" text-anchor="middle" fill="#fff" font-size="8">II</text>
+        <text x="250" y="75" text-anchor="middle" fill="#11212E">Fungibility and finance</text>
+        <circle cx="430" cy="110" r="11" fill="#1E3A57"/><text x="430" y="113.5" text-anchor="middle" fill="#fff" font-size="8">III</text>
+        <text x="430" y="90" text-anchor="middle" fill="#11212E">The unmeasured</text>
+        <circle cx="300" cy="150" r="11" fill="#7C3327"/><text x="300" y="153.5" text-anchor="middle" fill="#fff" font-size="8">IV</text>
+        <text x="300" y="172" text-anchor="middle" fill="#11212E">Creole ecologies</text>
+        <circle cx="560" cy="160" r="11" fill="#BE7B3A"/><text x="560" y="163.5" text-anchor="middle" fill="#fff" font-size="8">VI</text>
+        <text x="560" y="183" text-anchor="middle" fill="#11212E">Hydro archives</text>
+        <circle cx="610" cy="240" r="11" fill="#BE7B3A"/><text x="610" y="243.5" text-anchor="middle" fill="#fff" font-size="8">V</text>
+        <text x="610" y="263" text-anchor="middle" fill="#11212E">Thermal afterlives</text>
+        <circle cx="270" cy="245" r="11" fill="#1E3A57"/><text x="270" y="248.5" text-anchor="middle" fill="#fff" font-size="8">VIII</text>
+        <text x="270" y="268" text-anchor="middle" fill="#11212E">Chronotopes</text>
+      </g>
+      <g font-size="7.5">
+        <circle cx="80" cy="332" r="5" fill="#36807A"/><text x="90" y="335" fill="#5a5043">Anchor project</text>
+        <circle cx="185" cy="332" r="5" fill="#BE7B3A"/><text x="195" y="335" fill="#5a5043">Quick contribution</text>
+        <circle cx="320" cy="332" r="5" fill="#1E3A57"/><text x="330" y="335" fill="#5a5043">Theory building</text>
+        <circle cx="440" cy="332" r="5" fill="#7C3327"/><text x="450" y="335" fill="#5a5043">Horizon</text>
+      </g>
+    </svg>
+    <p class="tiny" style="color:var(--muted);text-align:center;margin-top:2pt;">Placement is the author's judgment and is meant to start a conversation, not to settle one.</p>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">15</span></div>
+</section>
+
+<!-- ============ PART III — the operational table ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part III · From Provocations to Projects</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <span class="eyebrow">The agenda in full</span>
+    <h3 style="font-size:15pt;margin-top:6pt;">Question, method, evidence, publication</h3>
+    <p class="small">Each provocation is carried here into a project defined by the evidence it rests on and the scholarly output in which it terminates. The final column states the primary publication, since a project that cannot name its output is not yet a project.</p>
+
+    <table class="matrix" style="margin-top:4pt;">
+      <tr><th style="width:4%"></th><th style="width:26%">Project</th><th style="width:24%">Primary evidence</th><th style="width:30%">Primary publication</th><th style="width:8%">Reach</th><th style="width:8%">Effort</th></tr>
+      <tr><td><strong>I</strong></td><td>Provision ground agronomy as adaptation science</td><td>Oral history, surviving practice, herbaria, colonial records</td><td>Article and a citable cultivar register (data paper)</td><td><span class="chip h">High</span></td><td><span class="chip m">Med</span></td></tr>
+      <tr><td><strong>II</strong></td><td>Fungibility and the price of climate</td><td>Climate finance instruments, policy texts, critical theory</td><td>Theory article and a critical lexicon</td><td><span class="chip h">High</span></td><td><span class="chip flag">Hard</span></td></tr>
+      <tr><td><strong>III</strong></td><td>The spectral and the sensor</td><td>Environmental monitoring records, archival gaps, fieldwork</td><td>Method article and a digital map of the unmeasured</td><td><span class="chip m">Med</span></td><td><span class="chip m">Med</span></td></tr>
+      <tr><td><strong>IV</strong></td><td>Creole ecologies</td><td>Field and botanical survey, photography, ecological literature</td><td>Co authored interdisciplinary article and a field essay</td><td><span class="chip h">High</span></td><td><span class="chip flag">Hard</span></td></tr>
+      <tr><td><strong>V</strong></td><td>Thermal afterlives</td><td>Labor history, heat and health records, oral history</td><td>Article across history and public health</td><td><span class="chip m">Med</span></td><td><span class="chip h">Low</span></td></tr>
+      <tr><td><strong>VI</strong></td><td>Hydro archives</td><td>Watershed records, oral history, field recording</td><td>Sonic essays and an article on water as method</td><td><span class="chip m">Med</span></td><td><span class="chip m">Med</span></td></tr>
+      <tr><td><strong>VII</strong></td><td>A reparations ecology</td><td>Case studies of community led repair, policy analysis</td><td>Framework article and a policy facing paper</td><td><span class="chip h">High</span></td><td><span class="chip m">Med</span></td></tr>
+      <tr><td><strong>VIII</strong></td><td>Chronotopes of the break</td><td>Theory, narrative analysis, the program's own corpus</td><td>Theory article on temporality</td><td><span class="chip m">Med</span></td><td><span class="chip h">Low</span></td></tr>
+    </table>
+
+    <div class="rule"></div>
+    <h4>A recommended sequence</h4>
+    <p class="small">For the funded period, the program would anchor on <strong>Project I</strong>, which carries the title, the strongest fieldwork, and a clear path to both an article and a citable dataset, and on <strong>Project VII</strong>, whose case material is partly in hand and whose policy relevance is immediate. <strong>Project II</strong> is named as the program's most ambitious theoretical contribution and its likeliest high impact publication, scoped as a horizon piece rather than a first year promise. <strong>Projects V and VIII</strong>, lower in effort, supply early articles that keep the publication cadence visible. <strong>Projects III, IV, and VI</strong> mature across the arc as the evidence base deepens. The whole is designed so that no single project's difficulty can stall the program, and so that an output is always near at hand.</p>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">16</span></div>
+</section>
+
+<!-- ============ PART III — flagship deep dive ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part III · From Provocations to Projects</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <span class="eyebrow">The anchor project in detail</span>
+    <h3 style="font-size:17pt;margin-top:6pt;line-height:1.1;">Project I, fully specified</h3>
+    <p class="lead" style="font-size:11pt;">The provision ground study is specified here as a worked example of how each project in the agenda would be built, from question to evidence to output.</p>
+
+    <div class="grid2" style="margin-top:4pt;">
+      <div>
+        <h4>The design</h4>
+        <p class="small">The study reconstructs the agronomy of provision grounds at the program's anchor sites through a triangulated evidence base: oral histories with elders and growers who carry the practice; documentation of surviving gardens and their cultivars; consultation of herbaria and seed collections; and colonial and estate records that register what was grown at the margins. The reconstructed practices are then set in dialogue with contemporary adaptation science, identifying convergences, divergences, and overlooked techniques.</p>
+        <h4>The standard of evidence</h4>
+        <p class="small">Every claim is anchored to a documented source, and the testimony is treated as primary expertise rather than as illustration. Where the historical record and living memory disagree, the disagreement is preserved and analyzed, not resolved away.</p>
+      </div>
+      <div>
+        <div class="card tide">
+          <span class="eyebrow">Outputs, in order</span>
+          <ul class="clean small" style="margin:7pt 0 0;">
+            <li>A peer reviewed article on provision ground agronomy as adaptation knowledge.</li>
+            <li>A citable cultivar and practice register, published as a data paper with full provenance.</li>
+            <li>A field guide returned to the participating communities.</li>
+            <li>A public essay translating the findings for a general readership.</li>
+          </ul>
+        </div>
+        <h4>Why it anchors the program</h4>
+        <p class="small">It is the project most likely to yield both a rigorous publication and a tangible good for the communities it studies, and it demonstrates the program's central claim, that Black ecological knowledge is expertise the climate field needs, in the most concrete possible form.</p>
+      </div>
+    </div>
+
+    <div class="card ink" style="margin-top:8pt;">
+      <span class="eyebrow">What remains genuinely uncertain</span>
+      <p class="small" style="margin:7pt 0 0;color:#efe8da;">Whether the reconstruction can reach the resolution the comparison requires, and whether the practices will prove superior, comparable, or inferior to current recommendations, cannot be known in advance. The program commits to reporting whichever result the evidence supports. That commitment is what distinguishes a research program from an argument seeking confirmation.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">17</span></div>
+</section>
+
+<!-- ============ PART IV.1 — methods overview ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part IV · Methods and Data</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <div class="part-tag"><span class="part-num">IV</span><span class="eyebrow" style="transform:translateY(-6px);">Methods and Data</span></div>
+    <h2 class="section">An evidence base, and how it is gathered</h2>
+    <svg class="tideline" style="margin:8pt 0 12pt;height:9px" viewBox="0 0 700 9" preserveAspectRatio="none"><path d="M0 5 Q 50 1 100 4 T 200 4 T 300 3 T 400 5 T 500 3 T 600 4 T 700 4" fill="none" stroke="#36807A" stroke-width="1.2"/></svg>
+
+    <p class="lead">The provocations of Part II are answerable only on the strength of the evidence brought to them. The program is humanities led in its methods, and it treats spatial and computational tools as instruments in service of interpretation rather than as the source of its claims.</p>
+
+    <p class="small">This ordering is deliberate. The questions at the program's frontier are questions of meaning, history, and power, and they are pursued first through the methods proper to such questions. The atlas and the computational apparatus that follow in this part are valuable precisely because they are disciplined by, and answerable to, the interpretive work described here.</p>
+
+    <h3>The core methods</h3>
+    <div class="grid2" style="margin-top:4pt;">
+      <div>
+        <h4>Archival and historical research</h4>
+        <p class="small">Colonial and estate records, cadastral and land use documents, parish and plantation registers, and the slave trade record, read critically and against their grain for what they register and what they suppress.</p>
+        <h4>Oral history and ethnography</h4>
+        <p class="small">Sustained, consent governed interviews and participant observation that treat community knowledge as primary expertise. This is the program's central evidentiary commitment and the source the other methods serve.</p>
+      </div>
+      <div>
+        <h4>Field and botanical survey</h4>
+        <p class="small">Documentation of surviving gardens, cultivars, waters, and landscapes, conducted with the communities and feeding Projects I, IV, and VI directly.</p>
+        <h4>Close reading and theory</h4>
+        <p class="small">The interpretive work, on finance, on temporality, on creolization, that turns evidence into argument and locates the program's claims within the scholarly field.</p>
+      </div>
+    </div>
+
+    <div class="card tide" style="margin-top:8pt;">
+      <h4 style="margin-top:0;">The ethic that governs collection</h4>
+      <p class="small" style="margin-bottom:0;">All evidence drawn from communities is gathered under a consent and care protocol that establishes ownership, the right to review and to edit, and the return of the material to its source. The camera and the recorder are instruments of witness, not of extraction, and the archive is built to be answerable to the people whose knowledge it holds. This is not an addendum to the method. It is the method.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">18</span></div>
+</section>
+
+<!-- ============ PART IV.2 — the spatial layer ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part IV · Methods and Data</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <span class="eyebrow ochre">One instrument among several</span>
+    <h3 style="font-size:16pt;margin-top:6pt;">The spatial layer, and its limits</h3>
+    <p class="small">Geospatial synthesis is one of the program's instruments, and a powerful one, but it is not its center. A map can make a relationship between history and present harm visible at a glance, and it can hold testimony, document, and datum at a single coordinate. It cannot, on its own, interpret what it shows, and it carries the colonial map's old temptation to claim a total and settled knowledge. The program uses the spatial layer for what it does well and constrains it where it misleads.</p>
+
+    <svg viewBox="0 0 700 300" style="width:100%;height:auto;margin:4pt 0 0;">
+      <rect x="0" y="0" width="700" height="300" rx="6" fill="#11212E"/>
+      <g stroke="#36807A" stroke-opacity=".14" fill="none" stroke-width="1">
+        <path d="M40 110 Q 200 82 360 120 T 660 110"/>
+        <path d="M40 150 Q 200 120 360 158 T 660 150"/>
+        <path d="M40 190 Q 200 160 360 198 T 660 190"/>
+        <path d="M40 230 Q 200 200 360 238 T 660 230"/>
+      </g>
+      <path d="M70 36 C 120 56 130 104 110 142 C 150 172 140 226 100 270 L 60 280 C 40 226 55 142 50 84 Z" fill="#1E3A57" opacity=".9"/>
+      <path d="M560 56 C 620 66 650 112 640 168 C 630 224 590 262 560 272 C 540 234 545 188 540 142 C 535 104 545 76 560 56 Z" fill="#1E3A57" opacity=".9"/>
+      <g stroke="#BE7B3A" stroke-width="1.4" fill="none" stroke-opacity=".7" stroke-dasharray="2 5">
+        <path d="M545 104 Q 360 56 150 104"/>
+        <path d="M560 166 Q 360 142 150 166"/>
+        <path d="M575 236 Q 380 272 175 222"/>
+      </g>
+      <g font-family="Space Grotesk, sans-serif" font-size="8" fill="#efe8da">
+        <circle cx="150" cy="104" r="6" fill="#36807A" stroke="#fff" stroke-width="1.2"/><text x="160" y="100">Carolina Lowcountry</text><text x="160" y="111" fill="#86c5bd" font-size="6.5">GULLAH GEECHEE · ANCHOR</text>
+        <circle cx="132" cy="142" r="5" fill="#36807A" stroke="#fff" stroke-width="1"/><text x="142" y="145">Louisiana</text>
+        <circle cx="200" cy="172" r="6" fill="#36807A" stroke="#fff" stroke-width="1.2"/><text x="210" y="175">Barbados</text><text x="210" y="186" fill="#86c5bd" font-size="6.5">ANCHOR</text>
+        <circle cx="118" cy="200" r="4" fill="#BE7B3A" stroke="#fff" stroke-width="1"/><text x="110" y="214" text-anchor="end">Belize</text>
+        <circle cx="205" cy="206" r="4" fill="#BE7B3A" stroke="#fff" stroke-width="1"/><text x="215" y="209">Bahia</text>
+        <circle cx="545" cy="104" r="5" fill="#BE7B3A" stroke="#fff" stroke-width="1"/><text x="535" y="100" text-anchor="end">Senegal</text>
+        <circle cx="556" cy="128" r="5" fill="#BE7B3A" stroke="#fff" stroke-width="1"/><text x="546" y="131" text-anchor="end">Ghana</text>
+        <circle cx="628" cy="186" r="5" fill="#BE7B3A" stroke="#fff" stroke-width="1"/><text x="618" y="189" text-anchor="end">Zanzibar</text>
+      </g>
+      <g font-family="Space Grotesk, sans-serif" font-size="7.5">
+        <circle cx="360" cy="278" r="5" fill="#36807A" stroke="#fff" stroke-width="1"/><text x="370" y="281" fill="#efe8da">Anchor sites</text>
+        <circle cx="470" cy="278" r="5" fill="#BE7B3A" stroke="#fff" stroke-width="1"/><text x="480" y="281" fill="#efe8da">Documented horizon</text>
+        <text x="40" y="281" fill="#d9a566" font-size="7.5">· · · the passages of the break</text>
+      </g>
+    </svg>
+    <p class="tiny" style="color:var(--muted);text-align:center;margin-top:3pt;">A schematic of the program's geography, anchor sites within the wider Atlantic it documents. The atlas built on this is one synthesis instrument, not the program's thesis.</p>
+
+    <div class="card ochre" style="margin-top:6pt;">
+      <h4 style="margin-top:0;">A critical commitment: fugitive cartography</h4>
+      <p class="small" style="margin-bottom:0;">Informed by Provocation III and by the right to opacity in Caribbean thought, the program maps in a way that can withhold. It marks refusal, declines to plot what a community asks to keep unplotted, and shows where its own knowledge ends. The map is thus made an object of inquiry as much as an instrument of it.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">19</span></div>
+</section>
+
+<!-- ============ PART IV.3 — data model ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part IV · Methods and Data</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <span class="eyebrow">Collecting and structuring the evidence</span>
+    <h3 style="font-size:16pt;margin-top:6pt;">A data model built for interpretation</h3>
+    <p class="small">Evidence gathered across eight projects and several sites must be structured so that it can be queried, compared, and published, without flattening the testimony into a statistic. The program adopts a record that holds three registers together at every unit of evidence, whether that unit is a site, a cultivar, an interview, or a water body.</p>
+
+    <svg viewBox="0 0 700 230" style="width:100%;height:auto;margin:6pt 0 4pt;font-family:'Space Grotesk',sans-serif;">
+      <rect x="20" y="14" width="660" height="202" rx="6" fill="#ECE2D0" stroke="#11212E" stroke-opacity=".25"/>
+      <rect x="20" y="14" width="660" height="44" rx="6" fill="#1E3A57"/>
+      <text x="38" y="34" font-size="11" fill="#fff" font-family="Fraunces, serif">A unit of evidence</text>
+      <text x="38" y="48" font-size="7.5" fill="#86c5bd" letter-spacing="1">SITE · CULTIVAR · TESTIMONY · WATER · RECORD</text>
+      <g>
+        <text x="40" y="84" font-size="8" fill="#225e59" letter-spacing="1.5">THE DATUM</text>
+        <text x="40" y="100" font-size="8.5" fill="#11212E" font-family="Spectral,serif">The measurable: location, condition,</text>
+        <text x="40" y="113" font-size="8.5" fill="#11212E" font-family="Spectral,serif">risk index, botanical record.</text>
+      </g>
+      <g>
+        <text x="250" y="84" font-size="8" fill="#8a5a1e" letter-spacing="1.5">THE HISTORY</text>
+        <text x="250" y="100" font-size="8.5" fill="#11212E" font-family="Spectral,serif">The documented past that produced</text>
+        <text x="250" y="113" font-size="8.5" fill="#11212E" font-family="Spectral,serif">the present: land use, ownership.</text>
+      </g>
+      <g>
+        <text x="470" y="84" font-size="8" fill="#7C3327" letter-spacing="1.5">THE TESTIMONY</text>
+        <text x="470" y="100" font-size="8.5" fill="#11212E" font-family="Spectral,serif">The knowledge of those who live it,</text>
+        <text x="470" y="113" font-size="8.5" fill="#11212E" font-family="Spectral,serif">recorded under consent, held as primary.</text>
+      </g>
+      <line x1="40" y1="132" x2="660" y2="132" stroke="#11212E" stroke-opacity=".15"/>
+      <text x="40" y="154" font-size="8" fill="#5a5043" letter-spacing="1.5">RELATIONS</text>
+      <text x="40" y="170" font-size="8.5" fill="#11212E" font-family="Spectral,serif">Every unit links to others: a cultivar to the gardens that grow it, an interview to the water it names,</text>
+      <text x="40" y="183" font-size="8.5" fill="#11212E" font-family="Spectral,serif">a site to the sites it shares practices with. These relations are themselves evidence, and they are queryable.</text>
+      <text x="40" y="205" font-size="8" fill="#225e59" font-family="Spectral,serif" font-style="italic">The testimony is the destination of the record; the datum is the context that earns its trust.</text>
+    </svg>
+
+    <div class="rule"></div>
+    <p class="small">Structuring the evidence relationally, rather than as isolated cases, is what allows the program to ask questions across sites and across centuries: which practices recur where, which knowledges travel along which passages of the break, where a documented harm meets a withheld silence. It is also what makes the underlying corpus publishable in its own right, as the data papers of Part V propose. The model is designed so that the act of organizing the evidence is already an act of interpretation, and so that the community's testimony is never subordinated to the measurement that surrounds it.</p>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">20</span></div>
+</section>
+
+<!-- ============ PART IV.4 — beyond the map ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part IV · Methods and Data</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <span class="eyebrow ochre">Showing the evidence</span>
+    <h3 style="font-size:16pt;margin-top:6pt;">Visualization beyond the map</h3>
+    <p class="small">Not all evidence belongs on a coordinate plane, and a program that reduced everything to the map would mistake one instrument for the whole toolkit. The program collects and presents its findings in several registers, each chosen for what it shows that the others cannot.</p>
+
+    <div class="grid2" style="margin-top:4pt;">
+      <div class="card tide"><span class="label">Relational and network views</span><p class="small" style="margin:5pt 0 0;">Graphs of how practices, cultivars, and knowledges connect across sites, making visible the kinship of the diaspora's ecological knowledge rather than its mere location. This is how Provocation I's shared agronomy and Provocation VI's named waters become legible as a system.</p></div>
+      <div class="card ochre"><span class="label">Sonic presentation</span><p class="small" style="margin:5pt 0 0;">Field recordings, oral testimony, and the soundscape of a place, the refinery hum, the lost birdsong, the sea, composed into sonic essays. Sound carries presence, grief, and the body in ways the visual cannot, and it serves Provocation VI directly.</p></div>
+      <div class="card" style="border-left:3px solid var(--indigo);"><span class="label">The visual essay</span><p class="small" style="margin:5pt 0 0;">Photography and document in deliberate sequence, pairing the archival image of a landscape with its present condition. An argument made by juxtaposition, suited to Projects I and IV.</p></div>
+      <div class="card" style="border-left:3px solid var(--oxblood);"><span class="label">The data paper</span><p class="small" style="margin:5pt 0 0;">The structured corpus itself, documented and released as a citable scholarly object so that others can build on it. Visualization here is the careful presentation of provenance and structure, treated in Part V.</p></div>
+    </div>
+
+    <div class="card ink" style="margin-top:8pt;">
+      <h4 style="margin-top:0;">The principle</h4>
+      <p class="small" style="margin-bottom:0;color:#efe8da;">The form of presentation is chosen to fit the evidence and the question, never the reverse. A finding about heat and the body may be best carried by an oral history; a finding about shared agronomy by a network graph; a finding about a watershed by sound. Method follows the question, and the question follows the community's knowledge.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">21</span></div>
+</section>
+
+<!-- ============ PART IV.5 — computation ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part IV · Methods and Data</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <span class="eyebrow">A bounded instrument</span>
+    <h3 style="font-size:16pt;margin-top:6pt;">Computation, used sparingly and accountably</h3>
+    <p class="lead" style="font-size:11pt;">Computational methods have a defined and limited place in this program. They scale the labor of listening and reading; they do not produce its knowledge.</p>
+
+    <p class="small">Used with restraint, computation lets a small team work across a large corpus: transcribing and translating hours of oral history into searchable text, reading colonial records at scale to extract names and dates for the historical layer, and surfacing patterns across distant communities for a human to examine or to reject. These are real efficiencies, and they serve several projects. They are also, in this program, kept firmly in a supporting role, subordinate to the interpretive and community accountable methods that precede them in this part.</p>
+
+    <div class="card tide" style="margin:8pt 0;">
+      <h4 style="margin-top:0;">The commitments that govern its use</h4>
+      <ul class="clean small" style="margin-bottom:0;">
+        <li><strong>It augments, it does not replace.</strong> The machine proposes patterns; the community and the scholar decide what they mean.</li>
+        <li><strong>It is accountable to communities.</strong> Nothing derived from a community's testimony is published before that community has reviewed it.</li>
+        <li><strong>It is transparent.</strong> Each computational step is documented so that a result can be reproduced and examined, as scholarship requires.</li>
+        <li><strong>It never fabricates.</strong> It does not generate words and attribute them to a person, and any synthetic image is labeled as such.</li>
+      </ul>
+    </div>
+
+    <p class="small">These commitments are not a disclaimer appended to the method; they are what makes the method admissible in a program whose entire argument concerns whose knowledge counts. Stated plainly, computation here is a magnifying glass held over community knowledge, never a substitute for it. The author's facility with these tools is offered as a means of carrying the program's labor efficiently, not as the program's distinguishing idea.</p>
+
+    <div class="pull">The question is never what the instrument can do. It is what the evidence requires, and what the people whose knowledge it is would have it do.
+      <span class="by">The rule for every instrument in this part</span></div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">22</span></div>
+</section>
+
+<!-- ============ PART V.1 — deliverables architecture ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part V · A Publication Architecture</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <div class="part-tag"><span class="part-num">V</span><span class="eyebrow" style="transform:translateY(-6px);">A Publication Architecture</span></div>
+    <h2 class="section">Designed to be published, not merely produced</h2>
+    <svg class="tideline" style="margin:8pt 0 12pt;height:9px" viewBox="0 0 700 9" preserveAspectRatio="none"><path d="M0 5 Q 50 1 100 4 T 200 4 T 300 3 T 400 5 T 500 3 T 600 4 T 700 4" fill="none" stroke="#36807A" stroke-width="1.2"/></svg>
+
+    <p class="lead">The program treats its outputs as a deliberate architecture rather than a series of separate products. Individual articles are arranged so that they accumulate into larger scholarly forms, and the whole is designed to be citable, durable, and legible to a funder.</p>
+
+    <p class="small">The reasoning is simple. Eight strong articles scattered across eight venues advance their authors; the same eight articles, designed from the outset to converge, advance a field and establish a program. The architecture below organizes the program's outputs into four tiers, from the synthesizing forms that frame the whole down to the individual contributions that compose it.</p>
+
+    <table class="matrix" style="margin-top:4pt;">
+      <tr><th style="width:22%">Form</th><th style="width:30%">What it is</th><th style="width:34%">What it does for the program</th><th style="width:14%">Horizon</th></tr>
+      <tr><td><strong>Special issue</strong></td><td>A guest edited issue of a journal in the field, gathering the program's core articles under one frame</td><td>Establishes the program as a recognized line of inquiry and a citable event in the literature</td><td>Year two</td></tr>
+      <tr><td><strong>Edited volume</strong></td><td>A book gathering the program's authors and its invited interlocutors</td><td>Gives the program a durable scholarly object and a teaching text</td><td>Beyond the grant</td></tr>
+      <tr><td><strong>Monograph arc</strong></td><td>A sequence of chapters that a single sustained study could become</td><td>Positions the work for a book of its own in time</td><td>Long term</td></tr>
+      <tr><td><strong>Peer reviewed articles</strong></td><td>One primary article per project, in venues matched to each</td><td>The load bearing scholarship; the units the larger forms are built from</td><td>Throughout</td></tr>
+      <tr><td><strong>Data papers</strong></td><td>The structured corpora released as citable scholarly objects</td><td>Makes the evidence itself a contribution others can build on and cite</td><td>From year one</td></tr>
+      <tr><td><strong>Public scholarship</strong></td><td>Essays, a digital edition, and an exhibition</td><td>Carries the argument to the public sphere and the communities</td><td>Throughout</td></tr>
+    </table>
+
+    <div class="card tide" style="margin-top:8pt;">
+      <h4 style="margin-top:0;">The keystone: a special issue of Cultural Dynamics</h4>
+      <p class="small" style="margin-bottom:0;">The program's most efficient consolidating move is a guest edited special issue on climate and the Black Atlantic, a natural home given the lab's editorial relationship to the journal. It would gather Projects I, II, IV, and VII under a single editorial frame, invite two or three external contributors to extend the conversation, and announce the program to the field in a form that is both rigorous and visible. A special issue is, in effect, a program made citable.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">23</span></div>
+</section>
+
+<!-- ============ PART V.2 — data as publication ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part V · A Publication Architecture</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <span class="eyebrow ochre">A second order of output</span>
+    <h3 style="font-size:16pt;margin-top:6pt;">The evidence itself, published</h3>
+    <p class="small">A distinctive feature of this program is that its evidence base is designed to be published as scholarship in its own right, not merely consumed privately to produce articles. This serves the decolonial commitment to an open and accountable archive, and it multiplies the program's scholarly footprint.</p>
+
+    <div class="grid2" style="margin-top:4pt;">
+      <div>
+        <h4>Data papers and datasets</h4>
+        <p class="small">The cultivar and practice register of Project I, the corpus of identified data deserts of Project III, and the structured oral history collection are each documented and released through a data journal or repository, with full provenance and clear terms of use. A data paper is peer reviewed, citable, and credits the labor of building the evidence, labor that conventional publishing renders invisible.</p>
+        <h4>A digital scholarly edition</h4>
+        <p class="small">The atlas and the structured corpus, taken together, constitute a work of digital scholarship that can be submitted for peer review as such, so that the platform is cited as research rather than dismissed as outreach. Several venues now review digital editions to the same standard as monographs.</p>
+      </div>
+      <div>
+        <div class="card ink">
+          <span class="eyebrow">Why this matters for the program</span>
+          <p class="small" style="margin:7pt 0 0;color:#efe8da;">Publishing the evidence does three things at once. It honors the communities by making the archive open and answerable. It lets other scholars build on the work, which is how a program becomes a field. And it produces durable, citable outputs in the first year, before the major articles are complete, keeping the program's contribution visible from the start.</p>
+        </div>
+        <h4>A standard to meet</h4>
+        <p class="small">All released data follows established principles for findable, accessible, interoperable, and reusable scholarship, adapted to the program's consent commitments so that nothing is opened that a community has asked to keep closed.</p>
+      </div>
+    </div>
+
+    <div class="card ochre" style="margin-top:8pt;">
+      <h4 style="margin-top:0;">A note on sequencing</h4>
+      <p class="small" style="margin-bottom:0;">Because data papers can be completed before their companion articles, they are the program's earliest formal publications. They establish a citable record in year one, demonstrate the evidence base to reviewers of the larger work, and give the communities a tangible return long before the scholarship concludes.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">24</span></div>
+</section>
+
+<!-- ============ PART V.3 — public scholarship ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part V · A Publication Architecture</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <span class="eyebrow">The third public</span>
+    <h3 style="font-size:16pt;margin-top:6pt;">Public scholarship and the return to communities</h3>
+    <p class="small">A program answerable to the communities whose knowledge it studies cannot treat publication as a purely academic act. Its outputs reach the public sphere and the communities themselves with the same seriousness they bring to the journal, and in a defined order that places the communities first.</p>
+
+    <div class="grid2" style="margin-top:4pt;">
+      <div>
+        <h4>The return, as method and as ethic</h4>
+        <p class="small">Before any academic premiere, findings go home: community gatherings and story circles at each site, where people see the work, correct the record, and extend it. This is not outreach appended to the research. It is how the evidence stays accurate and how the archive keeps the trust on which it depends. A finding a community rejects is a finding the program reexamines.</p>
+        <h4>The public forms</h4>
+        <ul class="clean small">
+          <li>Essays for a wide readership that translate the program's arguments without diluting them.</li>
+          <li>A digital scholarly edition, open and free, that makes the archive navigable to anyone.</li>
+          <li>An exhibition that gathers the program's photographic, documentary, and testimonial work into a public encounter.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="card ink">
+          <span class="eyebrow">The exhibition as a culminating form</span>
+          <p class="small" style="margin:7pt 0 0;color:#efe8da;">An exhibition does what neither the article nor the dataset can. It returns the work to a public in a form that is felt as well as understood, it travels between the community and the cultural institution, and it converts the program's scholarship into a public event that funders and audiences recognize. It is the natural home for the visual essays of Projects I and IV and the sonic work of Project VI.</p>
+        </div>
+        <h4>One standard, three publics</h4>
+        <p class="small">The discipline of the program is that the same finding is rendered for the journal, the public, and the community without contradiction. What persuades a reviewer must also be legible to a reader and answerable to a community. Holding all three is the program's signature difficulty, and its signature contribution.</p>
+      </div>
+    </div>
+
+    <div class="pull">The return is not the last step of the research. It is the test the research must pass, and the relationship without which there would be no archive to publish at all.
+      <span class="by">The dissemination ethic of the program</span></div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">25</span></div>
+</section>
+
+<!-- ============ PART V.4 — cadence of outputs ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part V · A Publication Architecture</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <span class="eyebrow ochre">The register of outputs</span>
+    <h3 style="font-size:16pt;margin-top:6pt;">A cadence, so the program is always visible</h3>
+    <p class="small">The architecture is sequenced so that a discrete, citable output appears at regular intervals rather than arriving all at once at the end. The register below arranges the outputs by when they can credibly land, demonstrating to a reviewer that the program produces continuously rather than promising everything at its conclusion.</p>
+
+    <table class="matrix" style="margin-top:4pt;">
+      <tr><th style="width:18%">Horizon</th><th style="width:46%">Output</th><th style="width:36%">Form</th></tr>
+      <tr><td><strong>Year one, early</strong></td><td>The cultivar and practice register (Project I)</td><td>Data paper, citable dataset</td></tr>
+      <tr><td><strong>Year one, early</strong></td><td>Thermal afterlives (Project V)</td><td>Peer reviewed article</td></tr>
+      <tr><td><strong>Year one, late</strong></td><td>Provision ground agronomy (Project I)</td><td>Peer reviewed article and public essay</td></tr>
+      <tr><td><strong>Year one, late</strong></td><td>Chronotopes of the break (Project VIII)</td><td>Theory article</td></tr>
+      <tr><td><strong>Year two, early</strong></td><td>The map of the unmeasured (Project III)</td><td>Method article and digital object</td></tr>
+      <tr><td><strong>Year two, early</strong></td><td>A reparations ecology (Project VII)</td><td>Framework article and policy paper</td></tr>
+      <tr><td><strong>Year two, late</strong></td><td>Fungibility and climate finance (Project II)</td><td>Theory article in a leading venue</td></tr>
+      <tr><td><strong>Year two, late</strong></td><td>Creole ecologies (Project IV)</td><td>Co authored article and field essay</td></tr>
+      <tr><td><strong>Year two, late</strong></td><td>The keystone special issue</td><td>Guest edited issue gathering the core</td></tr>
+      <tr><td><strong>Beyond the grant</strong></td><td>The edited volume and the digital edition</td><td>Book and peer reviewed digital scholarship</td></tr>
+    </table>
+
+    <div class="card tide" style="margin-top:8pt;">
+      <h4 style="margin-top:0;">Reading the cadence</h4>
+      <p class="small" style="margin-bottom:0;">The lower effort and data first outputs land early, establishing a citable record and demonstrating the evidence base. The ambitious theoretical contributions, Projects II and IV, arrive once the fieldwork and the analysis can support them, and the special issue consolidates the whole. By the close of the funded period the program has produced datasets, a series of articles, public essays, an exhibition, and a special issue, with a volume and a digital edition in train. The sequencing ensures the program never depends on a single distant deliverable, which is the property a reviewer most wants to see.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">26</span></div>
+</section>
+
+<!-- ============ PART VI.1 — course ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part VI · Teaching the Program</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <div class="part-tag"><span class="part-num">VI</span><span class="eyebrow" style="transform:translateY(-6px);">Teaching the Program</span></div>
+    <h2 class="section">A seminar built from the research</h2>
+    <svg class="tideline" style="margin:8pt 0 12pt;height:9px" viewBox="0 0 700 9" preserveAspectRatio="none"><path d="M0 5 Q 50 1 100 4 T 200 4 T 300 3 T 400 5 T 500 3 T 600 4 T 700 4" fill="none" stroke="#36807A" stroke-width="1.2"/></svg>
+
+    <p class="lead">Pedagogy is the most durable form of impact the program can produce. A graduate seminar converts the research into something that outlives the grant, trains a cohort to extend it, and turns the program's evidence into a teachable archive.</p>
+
+    <div class="card ink" style="margin:6pt 0 10pt;">
+      <span class="eyebrow">Proposed graduate seminar</span>
+      <h3 style="color:#fff;font-size:17pt;margin:5pt 0 2pt;">The Plantation and the Planet</h3>
+      <p class="small" style="color:#efe8da;margin:0;">A seminar in the environmental humanities of the Black Atlantic, in which students learn to read climate vulnerability as colonial history and contribute to one of the program's research projects directly.</p>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <h4>Learning outcomes</h4>
+        <ul class="clean small">
+          <li>Account for how plantation geography became climate infrastructure, with cases.</li>
+          <li>Read a dataset, a map, or a record as an argument rather than as neutral information.</li>
+          <li>Conduct a consent governed oral history interview and situate it in context.</li>
+          <li>Produce one documented, community accountable unit of evidence to the program's standard.</li>
+          <li>Locate the work within decolonial theory: the break, the wake, fungibility, creolization.</li>
+        </ul>
+      </div>
+      <div>
+        <h4>The arc, in five movements</h4>
+        <ol class="steps small">
+          <li><strong>Ground.</strong> The plantation as infrastructure; the provision ground as counterpoint.</li>
+          <li><strong>Movement.</strong> Forced migration and the climate diaspora.</li>
+          <li><strong>Accumulation.</strong> Slow violence, toxicity, and the unmeasured.</li>
+          <li><strong>Memory.</strong> The body and the watershed as archive; oral history as method.</li>
+          <li><strong>Otherwise.</strong> Creole ecologies and the climate imagination.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="card tide" style="margin-top:6pt;">
+      <h4 style="margin-top:0;">The signature assignment</h4>
+      <p class="small" style="margin-bottom:0;">Each student adopts one unit of evidence, a site, a cultivar, a water body, or a testimony, and documents it to the program's standard across the three registers. By the term's end the cohort has collectively extended the program's archive. The research feeds the teaching and the teaching feeds the research, a loop that is itself a fundable and publishable story.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">27</span></div>
+</section>
+
+<!-- ============ PART VI.2 — lesson 1 ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part VI · Teaching the Program</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <div class="two-col-head">
+      <span class="kicker-num">01</span>
+      <div><span class="eyebrow">Session · Movement I</span><h3 style="font-size:15pt;margin-top:2pt;">Reading a Landscape as an Argument</h3></div>
+    </div>
+    <div class="colorbar"><span style="background:#1E3A57"></span><span style="background:#BE7B3A"></span><span style="background:#7C3327"></span><span style="background:#36807A"></span></div>
+    <p class="small" style="margin-top:8pt;"><strong>Duration</strong> 75 minutes · <strong>Format</strong> seminar with a live spatial layer · <strong>Preparation</strong> one short theory text and two datasets.</p>
+
+    <h4>Objective</h4>
+    <p class="small">Students learn to read a map or a dataset not as neutral information but as a claim, and to articulate how plantation land use became present climate exposure.</p>
+
+    <h4>Arc</h4>
+    <table class="matrix">
+      <tr><th style="width:16%">Minutes</th><th style="width:28%">Move</th><th>What happens</th></tr>
+      <tr><td>0 to 10</td><td>Cold read</td><td>Project one location's flood layer alone. Ask who lives here, and how the room knows. Surface the assumptions.</td></tr>
+      <tr><td>10 to 30</td><td>The overlay</td><td>Bring up the historical land use layer. Students narrate the convergence of boundaries and name the move from correlation to argument.</td></tr>
+      <tr><td>30 to 50</td><td>Theory bridge</td><td>Connect to the plantation as infrastructure and to slow violence. Groups assign the case to a stratum of the model.</td></tr>
+      <tr><td>50 to 68</td><td>Counter read</td><td>Groups argue the map's limits: what it hides, whose knowledge is absent. This exercises the critique of the instrument itself.</td></tr>
+      <tr><td>68 to 75</td><td>Adopt a unit</td><td>Each student claims a unit of evidence for the term project.</td></tr>
+    </table>
+
+    <h4>Assessment</h4>
+    <p class="small">A one page memorandum stating the argument the chosen map makes and one argument it cannot make. Graded on precision.</p>
+    <div class="card ochre" style="margin-top:6pt;"><p class="small" style="margin:0;"><strong>Rationale:</strong> the session teaches critical visual literacy and theory in a single gesture, and it produces the first artifact of the term project on the first day, while modeling the program's own skepticism toward its instruments.</p></div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">28</span></div>
+</section>
+
+<!-- ============ PART VI.3 — lesson 2 ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part VI · Teaching the Program</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <div class="two-col-head">
+      <span class="kicker-num">02</span>
+      <div><span class="eyebrow">Session · Movement IV</span><h3 style="font-size:15pt;margin-top:2pt;">The Body and the Watershed as Archive</h3></div>
+    </div>
+    <div class="colorbar"><span style="background:#2f6f6a"></span><span style="background:#36807A"></span><span style="background:#1E3A57"></span><span style="background:#11212E"></span></div>
+    <p class="small" style="margin-top:8pt;"><strong>Duration</strong> 75 minutes and fieldwork · <strong>Format</strong> listening workshop · <strong>Preparation</strong> a reading on the wake and embodied memory; a recording device.</p>
+
+    <h4>Objective</h4>
+    <p class="small">Students learn oral history as both a research method and an ethic, attending to how environmental knowledge is held in gesture, ritual, and the way a person reads the sky and the water, and learning to record it without extracting it.</p>
+
+    <h4>Arc</h4>
+    <table class="matrix">
+      <tr><th style="width:16%">Minutes</th><th style="width:28%">Move</th><th>What happens</th></tr>
+      <tr><td>0 to 15</td><td>Frame</td><td>What distinguishes data <em>about</em> a community from knowledge <em>from</em> it? Introduce the wake and intergenerational climate memory.</td></tr>
+      <tr><td>15 to 35</td><td>Listen</td><td>Play one recorded oral history. Students log not facts but ecological knowledge: how this person reads weather, water, and season.</td></tr>
+      <tr><td>35 to 55</td><td>The ethics</td><td>Build the consent and care protocol together: ownership, the right to edit, the return of the recording.</td></tr>
+      <tr><td>55 to 75</td><td>Practice</td><td>Paired interviews on a personal environmental memory, with feedback on listening rather than questioning.</td></tr>
+      <tr><td>field</td><td>Assignment</td><td>One recorded interview for the student's unit, conducted under the protocol.</td></tr>
+    </table>
+
+    <h4>Assessment</h4>
+    <p class="small">A short edited audio piece and a reflection on one ethical decision made in the edit. Graded on care and consent as much as on content.</p>
+    <div class="card tide" style="margin-top:6pt;"><p class="small" style="margin:0;"><strong>Rationale:</strong> the session makes the principle of witness rather than extraction concrete, and it produces the testimony register of each student's unit of evidence, feeding Projects I, VI, and VII.</p></div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">29</span></div>
+</section>
+
+<!-- ============ PART VII.1 — near term ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part VII · Cadence and Coordination</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <div class="part-tag"><span class="part-num">VII</span><span class="eyebrow" style="transform:translateY(-6px);">Cadence and Coordination</span></div>
+    <h2 class="section">The near term, and the arc</h2>
+    <svg class="tideline" style="margin:8pt 0 12pt;height:9px" viewBox="0 0 700 9" preserveAspectRatio="none"><path d="M0 5 Q 50 1 100 4 T 200 4 T 300 3 T 400 5 T 500 3 T 600 4 T 700 4" fill="none" stroke="#36807A" stroke-width="1.2"/></svg>
+
+    <p class="lead">A program of inquiry becomes actionable only against a calendar. This section sets out the immediate sprint to the CHCI submission, then the two year arc the proposal itself would promise.</p>
+
+    <span class="eyebrow ochre" style="margin-top:6pt;display:block;">The near term · toward the June submission</span>
+    <svg viewBox="0 0 700 220" style="width:100%;height:auto;margin:6pt 0 2pt;font-family:'Space Grotesk',sans-serif;">
+      <g font-size="7" fill="#5a5043">
+        <text x="150" y="20">Jun 11</text><text x="320" y="20">Jun 15</text><text x="490" y="20">Jun 18</text><text x="628" y="20">Jun 21</text>
+      </g>
+      <line x1="150" y1="26" x2="150" y2="200" stroke="#11212E" stroke-opacity=".1"/>
+      <line x1="320" y1="26" x2="320" y2="200" stroke="#11212E" stroke-opacity=".1"/>
+      <line x1="490" y1="26" x2="490" y2="200" stroke="#11212E" stroke-opacity=".1"/>
+      <line x1="648" y1="26" x2="648" y2="200" stroke="#7C3327" stroke-opacity=".5" stroke-dasharray="3 3"/>
+      <g font-size="8" fill="#11212E">
+        <rect x="150" y="34" width="170" height="16" rx="3" fill="#1E3A57"/><text x="156" y="46" fill="#fff">Frame the program narrative</text>
+        <rect x="150" y="56" width="240" height="16" rx="3" fill="#36807A"/><text x="156" y="68" fill="#fff">Condense provocations to a proposal core</text>
+        <rect x="235" y="78" width="200" height="16" rx="3" fill="#36807A"/><text x="241" y="90" fill="#fff">Prepare the spatial and visual sample</text>
+        <rect x="320" y="100" width="160" height="16" rx="3" fill="#BE7B3A"/><text x="326" y="112" fill="#2a1908">Budget and work plan</text>
+        <rect x="320" y="122" width="200" height="16" rx="3" fill="#BE7B3A"/><text x="326" y="134" fill="#2a1908">Collaboration letters</text>
+        <rect x="445" y="144" width="120" height="16" rx="3" fill="#1E3A57"/><text x="451" y="156" fill="#fff">Full draft for review</text>
+        <rect x="525" y="166" width="123" height="16" rx="3" fill="#7C3327"/><text x="531" y="178" fill="#fff">Revise and submit</text>
+      </g>
+      <text x="648" y="198" text-anchor="end" font-size="7.5" fill="#7C3327">▲ SUBMISSION</text>
+    </svg>
+
+    <div class="card tide" style="margin-top:6pt;">
+      <h4 style="margin-top:0;">What can be in hand within seventy two hours</h4>
+      <p class="small" style="margin-bottom:0;">The program narrative, the provocations of Part II condensed into a two page proposal core, and a polished spatial and visual sample. Enough that the drafting begins from a structured document rather than a blank page, with the senior scholar reacting to drafts rather than originating them.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">30</span></div>
+</section>
+
+<!-- ============ PART VII.2 — two-year arc ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part VII · Cadence and Coordination</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <span class="eyebrow">The funded arc</span>
+    <h3 style="font-size:16pt;margin-top:6pt;">Two years, four phases, an output at every stage</h3>
+    <p class="small">The arc is sequenced so that each phase concludes in something discrete and reviewable, and so that the program's evidence deepens before its most ambitious claims are made. The publication cadence of Part V maps directly onto these phases.</p>
+
+    <svg viewBox="0 0 700 250" style="width:100%;height:auto;margin:8pt 0 4pt;font-family:'Space Grotesk',sans-serif;">
+      <line x1="30" y1="40" x2="670" y2="40" stroke="#11212E" stroke-width="1.5"/>
+      <g font-size="7.5" fill="#5a5043">
+        <text x="40" y="30">Year 1, Q1</text><text x="200" y="30">Year 1, Q3</text><text x="370" y="30">Year 2, Q1</text><text x="540" y="30">Year 2, Q3</text>
+      </g>
+      <g>
+        <rect x="30" y="50" width="150" height="170" rx="5" fill="#1E3A57"/>
+        <text x="44" y="72" font-size="9" fill="#fff">PHASE 1</text>
+        <text x="44" y="88" font-size="7.5" fill="#bcd0e0" font-family="Spectral,serif">Anchor and gather</text>
+        <text x="44" y="108" font-size="7.5" fill="#efe8da" font-family="Spectral,serif">· Lowcountry fieldwork</text>
+        <text x="44" y="120" font-size="7.5" fill="#efe8da" font-family="Spectral,serif">· Provision ground study</text>
+        <text x="44" y="132" font-size="7.5" fill="#efe8da" font-family="Spectral,serif">· Thermal afterlives</text>
+        <text x="44" y="150" font-size="6.5" fill="#86c5bd">OUTPUT: data paper, two articles</text>
+
+        <rect x="190" y="50" width="150" height="170" rx="5" fill="#2f6f6a"/>
+        <text x="204" y="72" font-size="9" fill="#fff">PHASE 2</text>
+        <text x="204" y="88" font-size="7.5" fill="#d7ece8" font-family="Spectral,serif">Caribbean and depth</text>
+        <text x="204" y="108" font-size="7.5" fill="#f1faf8" font-family="Spectral,serif">· Barbados fieldwork</text>
+        <text x="204" y="120" font-size="7.5" fill="#f1faf8" font-family="Spectral,serif">· Oral history corpus</text>
+        <text x="204" y="132" font-size="7.5" fill="#f1faf8" font-family="Spectral,serif">· Seminar taught</text>
+        <text x="204" y="150" font-size="6.5" fill="#d7ece8">OUTPUT: corpus, hydro archive</text>
+
+        <rect x="350" y="50" width="150" height="170" rx="5" fill="#BE7B3A"/>
+        <text x="364" y="72" font-size="9" fill="#2a1908">PHASE 3</text>
+        <text x="364" y="88" font-size="7.5" fill="#3a2410" font-family="Spectral,serif">Analyze and theorize</text>
+        <text x="364" y="108" font-size="7.5" fill="#2a1908" font-family="Spectral,serif">· The unmeasured</text>
+        <text x="364" y="120" font-size="7.5" fill="#2a1908" font-family="Spectral,serif">· Reparations ecology</text>
+        <text x="364" y="132" font-size="7.5" fill="#2a1908" font-family="Spectral,serif">· Fungibility study</text>
+        <text x="364" y="150" font-size="6.5" fill="#3a2410">OUTPUT: theory and method</text>
+
+        <rect x="510" y="50" width="160" height="170" rx="5" fill="#7C3327"/>
+        <text x="524" y="72" font-size="9" fill="#fff">PHASE 4</text>
+        <text x="524" y="88" font-size="7.5" fill="#eccfc8" font-family="Spectral,serif">Consolidate and exhibit</text>
+        <text x="524" y="108" font-size="7.5" fill="#fff" font-family="Spectral,serif">· Creole ecologies</text>
+        <text x="524" y="120" font-size="7.5" fill="#fff" font-family="Spectral,serif">· The special issue</text>
+        <text x="524" y="132" font-size="7.5" fill="#fff" font-family="Spectral,serif">· The exhibition</text>
+        <text x="524" y="150" font-size="6.5" fill="#eccfc8">OUTPUT: issue, exhibition, edition</text>
+      </g>
+      <text x="350" y="240" text-anchor="middle" font-size="7.5" fill="#5a5043" font-style="italic">Each phase returns its work to the communities first, then to the publics and the field.</text>
+    </svg>
+
+    <div class="rule"></div>
+    <p class="small">By the close of the funded period the program has produced a body of peer reviewed articles, citable datasets, a digital edition, a taught seminar, a guest edited special issue, and a public exhibition, with an edited volume in train. The early phases establish the evidence and the cadence; the later phases deliver the program's most original theoretical contributions, once the archive can sustain them. No phase depends on every element of another succeeding, which is the property that makes an ambitious program fundable.</p>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">31</span></div>
+</section>
+
+<!-- ============ PART VII.3 — coordination ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Part VII · Cadence and Coordination</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <span class="eyebrow ochre">Coordination and roles</span>
+    <h3 style="font-size:16pt;margin-top:6pt;">A division of labor</h3>
+    <p class="lead" style="font-size:11pt;">For the program to move efficiently, the division of labor should be explicit. What follows states it plainly, with the lines held clearly on both sides.</p>
+
+    <div class="grid2" style="margin-top:4pt;">
+      <div>
+        <h4>Carried by the author</h4>
+        <ul class="clean small">
+          <li><strong>Production and build.</strong> The spatial layer, the data infrastructure, the digital edition, the visual deliverables.</li>
+          <li><strong>Evidence gathering.</strong> Fieldwork, documentation, interviewing, and the structuring of the archive.</li>
+          <li><strong>First drafts and figures.</strong> So that scholarship reaches the senior scholar as material to react to.</li>
+          <li><strong>Computational support.</strong> Bounded and accountable, as set out in Part IV.</li>
+          <li><strong>Coordination.</strong> Timelines, deliverable tracking, and the cadence of outputs.</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Held by the senior scholar</h4>
+        <ul class="clean small">
+          <li>The theoretical framework and its claims. The author serves the framework rather than steering it.</li>
+          <li>The scholarly voice and the final word on every argument that bears the program's name.</li>
+          <li>The relationships and the trust built across the field over decades.</li>
+          <li>Authorship and credit, which remain entirely the senior scholar's to decide.</li>
+        </ul>
+        <div class="card tide" style="margin-top:8pt;">
+          <span class="label">In short</span>
+          <p class="small" style="margin:5pt 0 0;">The author is most useful as the person who turns open questions into evidence and drafts and built objects, so that the senior scholar's attention is reserved for the interpretive work only she can do.</p>
+        </div>
+      </div>
+    </div>
+
+    <h4>What would make the collaboration efficient</h4>
+    <p class="small">A standing check in at a regular interval, a clear first priority among the projects of Part III, and the latitude to bring work forward early and in draft. The author works best given a direction and the freedom to pursue it.</p>
+
+    <div class="card ink" style="margin-top:8pt;">
+      <p class="small" style="margin:0;color:#efe8da;">Practically, the author is available immediately and locally, including for the near term sprint, and can sustain the program's momentum with even a modest weekly commitment. An invoice for work completed to date is provided separately.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">32</span></div>
+</section>
+
+<!-- ============ APPENDIX A ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Appendix A · Evidence and Data Sources</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <div class="part-tag"><span class="part-num" style="color:var(--ochre)">+</span><span class="eyebrow ochre" style="transform:translateY(-6px);">Appendix A</span></div>
+    <h2 class="section">Evidence and data sources</h2>
+    <svg class="tideline" style="margin:8pt 0 12pt;height:9px" viewBox="0 0 700 9" preserveAspectRatio="none"><path d="M0 5 Q 50 1 100 4 T 200 4 T 300 3 T 400 5 T 500 3 T 600 4 T 700 4" fill="none" stroke="#36807A" stroke-width="1.2"/></svg>
+
+    <p class="small">The program's evidence base draws on sources that are publicly available, already held, or reachable through existing relationships, so that the work is a matter of gathering and interpretation rather than of acquisition from nothing. Sources are listed by the kind of evidence they supply.</p>
+
+    <table class="matrix" style="margin-top:6pt;">
+      <tr><th style="width:26%">Evidence</th><th style="width:40%">Source</th><th style="width:34%">Note</th></tr>
+      <tr><td><strong>Oral history and testimony</strong></td><td>The OJAI archive and new consent governed fieldwork</td><td>The program's primary evidence; community held</td></tr>
+      <tr><td><strong>Agronomic and botanical</strong></td><td>Herbaria, seed collections, surviving gardens, estate records</td><td>Anchors Project I; gathered with communities</td></tr>
+      <tr><td><strong>Historical land use</strong></td><td>State archives, historical GIS projects, plantation and cadastral records</td><td>Requires georeferencing, a core scholarly labor</td></tr>
+      <tr><td><strong>Climate and flood</strong></td><td>FEMA flood hazard data; NOAA sea level projections</td><td>Open and authoritative</td></tr>
+      <tr><td><strong>Environmental justice</strong></td><td>Federal environmental justice screening; facility records</td><td>Confirm current hosting before relying on it</td></tr>
+      <tr><td><strong>Demographic</strong></td><td>Census and community survey data</td><td>Tract level race and income</td></tr>
+      <tr><td><strong>The Atlantic record</strong></td><td>The Trans Atlantic Slave Trade Database</td><td>Cite carefully; underwrites the passages of the break</td></tr>
+      <tr><td><strong>Caribbean</strong></td><td>National statistical offices; UWI and regional datasets</td><td>SALISES ties assist access</td></tr>
+    </table>
+
+    <div class="card tide" style="margin-top:10pt;">
+      <h4 style="margin-top:0;">On the standing of the evidence</h4>
+      <p class="small" style="margin-bottom:0;">Public data about communities is not the same as knowledge authored by them. The program holds both and never lets the first speak over the second. Where a dataset and a testimony disagree, the disagreement is documented and analyzed rather than resolved away, in keeping with Provocation III and with the program's refusal of the colonial map's claim to total and settled knowledge.</p>
+    </div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">33</span></div>
+</section>
+
+<!-- ============ APPENDIX B ============ -->
+<section class="sheet">
+  <div class="runhead"><span>Appendix B · Working Glossary</span><span>The Provision Ground</span></div>
+  <div class="flow" style="margin-top:26pt;">
+    <div class="part-tag"><span class="part-num" style="color:var(--ochre)">+</span><span class="eyebrow ochre" style="transform:translateY(-6px);">Appendix B</span></div>
+    <h2 class="section">A working glossary</h2>
+    <svg class="tideline" style="margin:8pt 0 10pt;height:9px" viewBox="0 0 700 9" preserveAspectRatio="none"><path d="M0 5 Q 50 1 100 4 T 200 4 T 300 3 T 400 5 T 500 3 T 600 4 T 700 4" fill="none" stroke="#36807A" stroke-width="1.2"/></svg>
+    <p class="small">Working definitions for the terms this program leans on, so that any collaborator or reviewer reads them consistently. These are for shared use, not the last word.</p>
+
+    <div class="grid2" style="margin-top:4pt;column-gap:26px;">
+      <div>
+        <h4>The provision ground</h4>
+        <p class="tiny">The subsistence plot enslaved people worked for themselves at the plantation's edge, a site of food, seed, knowledge, and self direction. The program's emblem.</p>
+        <h4>The break</h4>
+        <p class="tiny">The rupture of colonial modernity, and the opening it leaves where other futures become thinkable. The program works in the break.</p>
+        <h4>Global Blackness: fugitive, fungible, spectral</h4>
+        <p class="tiny">Blackness read as a condition and an optic that exceeds the categories colonialism built for it: always escaping control, rendered exchangeable, and haunting the present.</p>
+        <h4>Fungibility</h4>
+        <p class="tiny">The rendering of life or land as interchangeable and priceable. Provocation II asks whether climate finance revives the logic.</p>
+        <h4>Creolization and creole ecology</h4>
+        <p class="tiny">The emergence of new forms from forced encounter, extended in Provocation IV from culture to the recombinant ecologies of plantation landscapes.</p>
+        <h4>Counter data</h4>
+        <p class="tiny">A method of treating absence and the unmeasured as evidence, developed in Provocation III.</p>
+      </div>
+      <div>
+        <h4>The plantation as infrastructure</h4>
+        <p class="tiny">The plantation treated as a still operating technology that organized land, water, and air, not a closed historical chapter.</p>
+        <h4>Slow violence</h4>
+        <p class="tiny">After Rob Nixon: harm that is gradual and dispersed, invisible to the logic of spectacle.</p>
+        <h4>The wake</h4>
+        <p class="tiny">After Christina Sharpe: living in the long aftermath of slavery, and the work of care and consciousness it demands.</p>
+        <h4>Poethics</h4>
+        <p class="tiny">An ethics inseparable from making and imagining, where how a thing is created carries its moral weight.</p>
+        <h4>Chronotope</h4>
+        <p class="tiny">A configuration of time and space. Provocation VIII reads plantation, climate, and diasporic time against one another.</p>
+        <h4>Fugitive cartography</h4>
+        <p class="tiny">A practice of mapping that honors opacity, withholding what a community asks to keep unplotted and marking where its own knowledge ends.</p>
+        <h4>Community accountable</h4>
+        <p class="tiny">Answerable to the people the work documents: they author, correct, and receive it. The opposite of extraction.</p>
+      </div>
+    </div>
+
+    <div class="rule dark" style="margin-top:10pt;"></div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:8pt;">
+      <div style="max-width:64%;">
+        <span class="eyebrow">Colophon</span>
+        <p class="tiny" style="margin-top:6pt;">Prepared by Cherryia White for Prof. Michaeline Crichlow and the Climate Change, Decolonization, and Global Blackness Lab, Duke University, June 2026. A research prospectus extending the working brainstorm that preceded it. Set in Fraunces, Spectral, and Space Grotesk. Diagrams drawn for this document. Open to revision at every level.</p>
+      </div>
+      <svg width="118" height="118" viewBox="0 0 120 120" style="flex-shrink:0;">
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#36807A" stroke-width="1"/>
+        <circle cx="60" cy="60" r="38" fill="none" stroke="#BE7B3A" stroke-width="1" opacity=".6"/>
+        <g stroke="#11212E" stroke-width="1" fill="none" opacity=".5">
+          <path d="M20 60 Q 40 50 60 60 T 100 60"/>
+          <path d="M22 72 Q 42 62 62 72 T 102 72"/>
+          <path d="M22 48 Q 42 38 62 48 T 102 48"/>
+        </g>
+        <circle cx="60" cy="60" r="3.5" fill="#7C3327"/>
+        <text x="60" y="112" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="5.4" letter-spacing="1.1" fill="#5a5043">THE PROVISION GROUND</text>
+      </svg>
+    </div>
+
+    <div class="pull" style="margin-top:12pt;border-color:var(--ochre);">The ground the plantation meant for subsistence became a ground of knowledge and refusal. This program proposes to study what grew there, and to let it teach the climate future its lesson.
+      <span class="by">Where the program begins</span></div>
+  </div>
+  <div class="runfoot"><span>Cherryia White · CCDGB Lab · Duke University</span><span class="pg">34</span></div>
+</section>
+
+<script>const page=location.pathname.split('/').pop()||'index.html';document.querySelectorAll('.sitenav .pages a').forEach(a=>{if(a.getAttribute('href')===page)a.classList.add('active');});</script>
+</body>
+</html>
