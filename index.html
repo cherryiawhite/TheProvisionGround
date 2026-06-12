@@ -51,13 +51,31 @@ a.doc:hover .go{transform:translateX(3px);color:var(--ochre);}
 a.doc.minor{border-left-color:var(--ochre);background:transparent;padding:14px 18px;}
 a.doc.minor .t{font-size:16px;}
 
-footer{border-top:1px solid var(--line);background:var(--paper);}
+/* SITE NAV */
+.sitenav{position:sticky;top:0;z-index:100;background:var(--paper);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,5vw,40px);height:44px;gap:16px;}
+.sitenav .home{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--tide-deep);text-decoration:none;white-space:nowrap;flex-shrink:0;}
+.sitenav .home:hover{color:var(--ochre);}
+.sitenav .pages{display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
+.sitenav .pages a{font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:4px 10px;border-radius:20px;border:1px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s,background .15s;}
+.sitenav .pages a:hover{color:var(--ink);border-color:var(--line);background:var(--paper2);}
+.sitenav .pages a.active{color:var(--tide-deep);border-color:rgba(34,94,89,.35);background:rgba(54,128,122,.07);}
+.sitenav .divpipe{width:1px;height:18px;background:var(--line);margin:0 4px;flex-shrink:0;}
+
 .foot{max-width:760px;margin:0 auto;padding:18px clamp(20px,5vw,40px) 28px;
   font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
   display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 </style>
 </head>
 <body>
+  <nav class="sitenav" aria-label="Site navigation">
+    <a class="home" href="index.html">The Provision Ground</a>
+    <div class="divpipe"></div>
+    <div class="pages">
+      <a href="prospectus.html">01 · Prospectus</a>
+      <a href="strengths.html">02 · Ground Truth</a>
+      <a href="atlas.html">03 · Atlas</a>
+    </div>
+  </nav>
   <main class="wrap">
     <div class="eyebrow">A research program · CCDGB Lab · Duke University</div>
     <h1>The Provision&nbsp;Ground</h1>
@@ -107,5 +125,12 @@ footer{border-top:1px solid var(--line);background:var(--paper);}
       <span>Cherryia White · for M. Crichlow · CCDGB</span>
     </div>
   </footer>
+  <script>
+    // Highlight current page in nav
+    const page = location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.sitenav .pages a').forEach(a => {
+      if (a.getAttribute('href') === page) a.classList.add('active');
+    });
+  </script>
 </body>
 </html>
